@@ -44,7 +44,14 @@ export const StudentDashboard = ({ currentUser, onBackToLogin, onUpdateCurrentUs
   };
 
   // Stage 1 Completion handler
-  const handleCompleteDiagnostic = (answers) => {
+  const handleCompleteDiagnostic = (answers, updatedStudentFromEval, subFromEval) => {
+    if (updatedStudentFromEval && subFromEval) {
+      setLatestSubmission(subFromEval);
+      refreshStudentState(updatedStudentFromEval);
+      setCurrentStage(2);
+      return;
+    }
+
     const analysis = AdaptiveEngine.analyzeDiagnostic(answers);
 
     const updated = StorageService.updateStudent(student.id, {
@@ -77,7 +84,14 @@ export const StudentDashboard = ({ currentUser, onBackToLogin, onUpdateCurrentUs
   };
 
   // Stage 4 Completion handler
-  const handleCompleteQuiz = (submissionPayload) => {
+  const handleCompleteQuiz = (submissionPayload, updatedStudentFromEval) => {
+    if (updatedStudentFromEval && submissionPayload) {
+      setLatestSubmission(submissionPayload);
+      refreshStudentState(updatedStudentFromEval);
+      setCurrentStage(5);
+      return;
+    }
+
     const sub = StorageService.addSubmission(submissionPayload);
     const updated = AdaptiveEngine.updateStudentProfileAfterTest(student, submissionPayload);
     StorageService.updateStudent(student.id, updated);

@@ -53,22 +53,25 @@
       "classId": "class-b",
       "avatar": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80",
       "initialTestTaken": true,
-      "overallMastery": 52,
-      "learningVelocity": "Moderate",
+      "overallMastery": 48,
+      "learningVelocity": "Needs Support",
       "status": "Needs Intervention",
-      "testsTaken": 3,
+      "testsTaken": 4,
       "conceptMastery": {
-        "c1": 85,
-        "c2": 78,
-        "c3": 60,
+        "c1": 94,
+        "c2": 31,
+        "c3": 84,
         "c4": 28,
         "c5": 32,
         "c6": 20,
         "c7": 45
       },
       "criticalGaps": [
+        "c2",
         "c4",
-        "c5"
+        "c5",
+        "c6",
+        "c7"
       ],
       "rootPrerequisiteBottleneck": "c4",
       "mentorNotes": [
@@ -77,7 +80,8 @@
           "author": "Dr. Marcus Vance",
           "note": "Struggles with binomial factoring and difference of squares. This is cascading into quadratics."
         }
-      ]
+      ],
+      "lastActive": "9/26/2026"
     },
     {
       "id": "s2",
@@ -242,6 +246,135 @@
     }
   ],
   "submissions": [
+    {
+      "id": "sub_1790413270274_536",
+      "studentId": "s1",
+      "studentName": "Alex Rivera",
+      "testType": "Adaptive Quiz",
+      "title": "Adaptive Quiz - 9/26/2026",
+      "date": "9/26/2026 02:31 PM",
+      "score": 67,
+      "rawAccuracy": 67,
+      "totalQuestions": 3,
+      "correctCount": 2,
+      "durationMinutes": 5,
+      "difficultyReached": "HARD",
+      "answers": [
+        {
+          "questionId": "c1_d1",
+          "conceptId": "c1",
+          "difficulty": "easy",
+          "selected": 0,
+          "correct": 0,
+          "isCorrect": true,
+          "timeSpent": 24
+        },
+        {
+          "questionId": "c2_d1",
+          "conceptId": "c2",
+          "difficulty": "medium",
+          "selected": 2,
+          "correct": 1,
+          "isCorrect": false,
+          "timeSpent": 45
+        },
+        {
+          "questionId": "c3_d1",
+          "conceptId": "c3",
+          "difficulty": "hard",
+          "selected": 3,
+          "correct": 3,
+          "isCorrect": true,
+          "timeSpent": 35
+        }
+      ],
+      "evaluation": {
+        "score": 67,
+        "rawAccuracy": 67,
+        "grade": "Functional Foundation",
+        "previousOverallMastery": 52,
+        "newOverallMastery": 48,
+        "overallDelta": "-4%",
+        "numericDelta": -4,
+        "avgTimePerQuestion": 15,
+        "learningVelocity": "Needs Support",
+        "conceptDeltas": [
+          {
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "previousMastery": 85,
+            "newMastery": 94,
+            "delta": "+9%",
+            "numericDelta": 9,
+            "testAccuracy": 100,
+            "questionsCount": 1,
+            "status": "Improving 📈"
+          },
+          {
+            "conceptId": "c2",
+            "conceptName": "Linear Equations & Inequalities",
+            "previousMastery": 78,
+            "newMastery": 31,
+            "delta": "-47%",
+            "numericDelta": -47,
+            "testAccuracy": 0,
+            "questionsCount": 1,
+            "status": "Needs Reinforcement ⚠️"
+          },
+          {
+            "conceptId": "c3",
+            "conceptName": "Polynomial Operations",
+            "previousMastery": 60,
+            "newMastery": 84,
+            "delta": "+24%",
+            "numericDelta": 24,
+            "testAccuracy": 100,
+            "questionsCount": 1,
+            "status": "Rapid Progress 🚀"
+          }
+        ],
+        "cognitiveDiagnoses": [
+          {
+            "questionId": "c2_d1",
+            "conceptId": "c2",
+            "conceptName": "Linear Equations & Inequalities",
+            "selectedOption": "Chosen Option",
+            "correctOption": "Correct Option",
+            "trapTitle": "Conceptual Misapplication",
+            "trapExplanation": "Distractor option selected.",
+            "remedy": "Double-check inverse mathematical operations."
+          }
+        ],
+        "resolvedGaps": [],
+        "persistentGaps": [
+          "Factoring Polynomials",
+          "Quadratic Equations & Roots"
+        ],
+        "newlyIdentifiedGaps": [
+          "Linear Equations & Inequalities",
+          "Parabolic Graphs & Vertex Forms",
+          "Exponential Functions"
+        ],
+        "rootPrerequisiteBottleneck": "c4",
+        "rootBottleneckName": "Factoring Polynomials",
+        "prescription": {
+          "summary": "Diagnostic assessment complete. Baseline calibrated across foundational competencies.",
+          "strengths": [
+            "Arithmetic & Number Properties (94% mastery)",
+            "Polynomial Operations (84% mastery)"
+          ],
+          "focusAreas": [
+            "Linear Equations & Inequalities",
+            "Factoring Polynomials",
+            "Quadratic Equations & Roots",
+            "Parabolic Graphs & Vertex Forms",
+            "Exponential Functions"
+          ],
+          "recommendedAction": "Focus next sprint on Factoring Polynomials to resolve the critical bottleneck unlocking higher-level units.",
+          "mentorInsight": "Student is calibrating baseline performance. Recommended to assign targeted remedial practice for Linear Equations & Inequalities, Factoring Polynomials, Quadratic Equations & Roots, Parabolic Graphs & Vertex Forms, Exponential Functions."
+        }
+      }
+    },
     {
       "id": "sub_s1_01",
       "studentId": "s1",

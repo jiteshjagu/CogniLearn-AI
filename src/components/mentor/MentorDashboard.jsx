@@ -26,6 +26,8 @@ import {
 import { CONCEPTS, CONCEPT_LIST } from '../../data/conceptsData';
 import { StorageService } from '../../services/storageService';
 import { ApiClient } from '../../services/apiClient';
+import { AdaptiveEngine } from '../../services/adaptiveEngine';
+import { DynamicEvaluationModal } from '../common/DynamicEvaluationModal';
 
 export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent }) => {
   const [students, setStudents] = useState(StorageService.getStudents());
@@ -35,6 +37,7 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
   // Default to null so the mentor SEES all students' names first
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [selectedSubmissionId, setSelectedSubmissionId] = useState(null);
+  const [showEvalModal, setShowEvalModal] = useState(false);
   
   const [mentorNoteInput, setMentorNoteInput] = useState('');
   const [noteSuccess, setNoteSuccess] = useState(false);
@@ -83,6 +86,16 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
   const selectedStudent = students.find(s => s.id === selectedStudentId);
   const studentSubmissions = selectedStudent ? StorageService.getSubmissionsByStudent(selectedStudent.id) : [];
   const selectedSubmission = studentSubmissions.find(sub => sub.id === selectedSubmissionId) || studentSubmissions[0];
+
+  const activeSubmissionEval = selectedSubmission?.evaluation || (
+    selectedSubmission && selectedStudent
+      ? AdaptiveEngine.evaluateAssessmentResult(selectedStudent, {
+          answers: selectedSubmission.answers || [],
+          testType: selectedSubmission.testType,
+          title: selectedSubmission.title
+        }).evaluation
+      : null
+  );
 
   const handleOpenStudentReport = (student) => {
     setSelectedStudentId(student.id);
@@ -646,7 +659,15 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
                     </div>
 
                     {selectedSubmission && (
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setShowEvalModal(true)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-bold transition-all shadow-2xs"
+                        >
+                          <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                          <span>View Dynamic Evaluation</span>
+                        </button>
                         <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">
                           {selectedSubmission.answers?.filter(a => a.isCorrect).length || 0} Correct
                         </span>
@@ -883,6 +904,15 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
           </div>
         </div>
       )}
+
+      {/* Dynamic Evaluation Inspection Modal for Mentor */}
+      <DynamicEvaluationModal
+        isOpen={showEvalModal}
+        onClose={() => setShowEvalModal(false)}
+        evaluation={activeSubmissionEval}
+        student={selectedStudent}
+        testTitle={`Mentor Review: ${selectedSubmission?.title || 'Assessment Evaluation'}`}
+      />
 
     </div>
   );

@@ -8,16 +8,27 @@ import {
   HelpCircle,
   Sparkles,
   BarChart,
-  ShieldAlert
+  ShieldAlert,
+  Loader2,
+  RefreshCw
 } from 'lucide-react';
 import { QUESTION_BANK, DIAGNOSTIC_QUESTION_IDS } from '../../data/questionBank';
 import { CONCEPTS } from '../../data/conceptsData';
+import { ApiClient } from '../../services/apiClient';
+import { DynamicEvaluationModal } from '../common/DynamicEvaluationModal';
 
 export const DiagnosticAssessment = ({ student, onCompleteDiagnostic }) => {
   // Filter questions for the diagnostic test
-  const diagnosticQuestions = DIAGNOSTIC_QUESTION_IDS
+  const defaultQuestions = DIAGNOSTIC_QUESTION_IDS
     .map(id => QUESTION_BANK.find(q => q.id === id))
     .filter(Boolean);
+
+  const [diagnosticQuestions, setDiagnosticQuestions] = useState(defaultQuestions);
+  const [isGeneratingBatch, setIsGeneratingBatch] = useState(false);
+  const [isEvaluating, setIsEvaluating] = useState(false);
+  const [evaluationResult, setEvaluationResult] = useState(null);
+  const [showEvaluationModal, setShowEvaluationModal] = useState(false);
+  const [pendingAnswersPayload, setPendingAnswersPayload] = useState(null);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
@@ -35,6 +46,26 @@ export const DiagnosticAssessment = ({ student, onCompleteDiagnostic }) => {
     setQuestionStartTime(Date.now());
     setShowHint(false);
   }, [currentIndex]);
+
+  const handleGenerateDynamicQuestions = async () => {
+    setIsGeneratingBatch(true);
+    try {
+      const dynamicList = await ApiClient.generateDynamicBatch({
+        conceptIds: ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'],
+        difficulty: 'medium'
+      });
+      if (dynamicList && dynamicList.length > 0) {
+        setDiagnosticQuestions(dynamicList);
+        setCurrentIndex(0);
+        setSelectedAnswers({});
+        setQuestionTimes({});
+      }
+    } catch (err) {
+      console.error('Failed to generate dynamic diagnostic batch:', err);
+    } finally {
+      setIsGeneratingBatch(false);
+    }
+  };
 
   const handleSelectOption = (optionIndex) => {
     const elapsedSeconds = Math.max(1, Math.round((Date.now() - questionStartTime) / 1000));
@@ -60,10 +91,10 @@ export const DiagnosticAssessment = ({ student, onCompleteDiagnostic }) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsSubmitting(true);
+    setIsEvaluating(true);
 
-    // Compile comprehensive answer log
     const answersPayload = diagnosticQuestions.map(q => {
       const studentAnswerIndex = selectedAnswers[q.id] ?? -1;
       const isCorrect = studentAnswerIndex === q.correctIndex;
@@ -80,14 +111,34 @@ export const DiagnosticAssessment = ({ student, onCompleteDiagnostic }) => {
         correctIndex: q.correctIndex,
         isCorrect,
         timeSpentSeconds: timeSpent,
-        explanation: q.explanation
+        explanation: q.explanation,
+        misconceptionAnalysis: q.misconceptionAnalysis
       };
     });
 
-    setTimeout(() => {
+    setPendingAnswersPayload(answersPayload);
+
+    try {
+      const result = await ApiClient.evaluateAssessmentResult(student, {
+        answers: answersPayload,
+        testType: 'Diagnostic Assessment',
+        title: 'Baseline Algebra Readiness Diagnostic',
+        durationMinutes: Math.max(1, Math.round(answersPayload.reduce((a, b) => a + b.timeSpentSeconds, 0) / 60))
+      });
+
+      if (result?.evaluation) {
+        setEvaluationResult(result);
+        setShowEvaluationModal(true);
+      } else {
+        onCompleteDiagnostic(answersPayload);
+      }
+    } catch (err) {
+      console.error('Diagnostic evaluation error:', err);
       onCompleteDiagnostic(answersPayload);
+    } finally {
       setIsSubmitting(false);
-    }, 600);
+      setIsEvaluating(false);
+    }
   };
 
   return (
@@ -105,6 +156,32 @@ export const DiagnosticAssessment = ({ student, onCompleteDiagnostic }) => {
           <p className="text-xs text-slate-500 mt-0.5">
             Evaluates foundational skills across 7 concepts to detect knowledge gaps and prerequisite bottlenecks.
           </p>
+          <div className="mt-2.5 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleGenerateDynamicQuestions}
+              disabled={isGeneratingBatch || isSubmitting}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-bold transition-all disabled:opacity-50"
+              title="Generate fresh dynamic questions via AI + Math Engine"
+            >
+              {isGeneratingBatch ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span>Generating Dynamic Questions...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                  <span>Generate Dynamic AI Questions</span>
+                </>
+              )}
+            </button>
+            {diagnosticQuestions[0]?.isDynamic && (
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-700">
+                ✨ Dynamic Questions Active
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
@@ -279,6 +356,22 @@ export const DiagnosticAssessment = ({ student, onCompleteDiagnostic }) => {
           );
         })}
       </div>
+
+      {/* Dynamic Assessment Evaluation Modal */}
+      <DynamicEvaluationModal
+        isOpen={showEvaluationModal}
+        onClose={() => setShowEvaluationModal(false)}
+        evaluation={evaluationResult?.evaluation}
+        student={student}
+        testTitle="Diagnostic Assessment Calibration Report"
+        onProceed={() => {
+          onCompleteDiagnostic(
+            pendingAnswersPayload,
+            evaluationResult?.student,
+            evaluationResult?.submission
+          );
+        }}
+      />
 
     </div>
   );

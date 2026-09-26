@@ -14,11 +14,14 @@ import {
   Gauge,
   Clock,
   ShieldCheck,
-  Brain
+  Brain,
+  Loader2
 } from 'lucide-react';
 import { CONCEPTS } from '../../data/conceptsData';
 import { AdaptiveEngine } from '../../services/adaptiveEngine';
 import { AiTutorService } from '../../services/aiTutorService';
+import { ApiClient } from '../../services/apiClient';
+import { DynamicEvaluationModal } from '../common/DynamicEvaluationModal';
 
 export const AdaptiveQuizView = ({ student, targetConceptId = 'c4', onCompleteQuiz }) => {
   const concept = CONCEPTS[targetConceptId] || CONCEPTS['c4'];
@@ -40,15 +43,66 @@ export const AdaptiveQuizView = ({ student, targetConceptId = 'c4', onCompleteQu
   const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
   const [consecutiveIncorrect, setConsecutiveIncorrect] = useState(0);
 
+  // Dynamic API & Evaluation State
+  const [isLoadingQuestion, setIsLoadingQuestion] = useState(false);
+  const [isEvaluating, setIsEvaluating] = useState(false);
+  const [evaluationResult, setEvaluationResult] = useState(null);
+  const [showEvaluationModal, setShowEvaluationModal] = useState(false);
+
   // Load first question on mount or concept change
   useEffect(() => {
     fetchNextQuestion('medium', [], null, 0, 0);
   }, [targetConceptId]);
 
-  const fetchNextQuestion = (difficulty, alreadyAnswered, lastCorrect, numCorr, numIncorr) => {
+  const fetchNextQuestion = async (difficulty, alreadyAnswered, lastCorrect, numCorr, numIncorr) => {
+    setIsLoadingQuestion(true);
+
+    let nextDifficulty = difficulty;
+    let triggerReason = `Calibrating initial difficulty to ${difficulty.toUpperCase()}`;
+
+    if (lastCorrect === true) {
+      if (difficulty === 'easy') nextDifficulty = 'medium';
+      else if (difficulty === 'medium') nextDifficulty = 'hard';
+      triggerReason = `Increased difficulty to ${nextDifficulty.toUpperCase()} after correct answer`;
+    } else if (lastCorrect === false) {
+      if (difficulty === 'hard') nextDifficulty = 'medium';
+      else if (difficulty === 'medium') nextDifficulty = 'easy';
+      triggerReason = `Adapted difficulty to ${nextDifficulty.toUpperCase()} to provide supportive reinforcement`;
+    }
+
+    try {
+      // Query Dynamic AI / Procedural Question Generator API
+      const dynamicQ = await ApiClient.generateDynamicQuestion({
+        conceptId: targetConceptId,
+        difficulty: nextDifficulty,
+        context: {
+          studentId: student?.id,
+          studentName: student?.name,
+          consecutiveCorrect: numCorr,
+          consecutiveIncorrect: numIncorr,
+          answeredIds: alreadyAnswered
+        }
+      });
+
+      if (dynamicQ) {
+        setActiveQuestion(dynamicQ);
+        setCurrentDifficulty(nextDifficulty);
+        setAdaptiveNotification(triggerReason);
+        setSelectedOption(null);
+        setIsAnswerSubmitted(false);
+        setAiMistakeExplanation(null);
+        setQuestionStartTime(Date.now());
+        setIsLoadingQuestion(false);
+        return;
+      }
+    } catch (err) {
+      console.warn('Dynamic question API fallback:', err);
+    }
+
+    // Secondary fallback
     const nextQResult = AdaptiveEngine.getNextAdaptiveQuestion({
       conceptId: targetConceptId,
-      currentDifficulty: difficulty,
+      currentDifficulty: nextDifficulty,
       answeredIds: alreadyAnswered,
       lastAnswerCorrect: lastCorrect,
       consecutiveCorrect: numCorr,
@@ -64,9 +118,9 @@ export const AdaptiveQuizView = ({ student, targetConceptId = 'c4', onCompleteQu
       setAiMistakeExplanation(null);
       setQuestionStartTime(Date.now());
     } else {
-      // Quiz finished or bank exhausted
       finishQuiz(sessionAnswers);
     }
+    setIsLoadingQuestion(false);
   };
 
   const handleSelectOption = (idx) => {
@@ -136,39 +190,47 @@ export const AdaptiveQuizView = ({ student, targetConceptId = 'c4', onCompleteQu
     }
   };
 
-  const finishQuiz = (answers) => {
-    const totalScore = Math.round(
-      (answers.filter(a => a.isCorrect).length / (answers.length || 1)) * 100
-    );
+  const finishQuiz = async (answers) => {
+    setIsEvaluating(true);
+    try {
+      const result = await ApiClient.evaluateAssessmentResult(student, {
+        answers,
+        testType: 'Adaptive Quiz',
+        title: `Adaptive Quiz: ${concept.name}`,
+        durationMinutes: Math.max(1, Math.round(answers.reduce((acc, a) => acc + (a.timeSpentSeconds || 15), 0) / 60))
+      });
 
-    if (totalScore >= 60) {
-      try {
-        confetti({
-          particleCount: 80,
-          spread: 70,
-          origin: { y: 0.6 }
+      if (result?.evaluation) {
+        setEvaluationResult(result);
+        setShowEvaluationModal(true);
+        if (result.evaluation.score >= 60) {
+          try {
+            confetti({
+              particleCount: 80,
+              spread: 70,
+              origin: { y: 0.6 }
+            });
+          } catch {}
+        }
+      } else {
+        const totalScore = Math.round(
+          (answers.filter(a => a.isCorrect).length / (answers.length || 1)) * 100
+        );
+        onCompleteQuiz({
+          id: `sub_${Date.now()}`,
+          studentId: student.id,
+          studentName: student.name,
+          testType: 'Adaptive Quiz',
+          title: `Adaptive Quiz: ${concept.name}`,
+          score: totalScore,
+          answers
         });
-      } catch {
-        // ignore if blocked
       }
+    } catch (err) {
+      console.error('Quiz evaluation error:', err);
+    } finally {
+      setIsEvaluating(false);
     }
-
-    const submissionPayload = {
-      id: `sub_${Date.now()}`,
-      studentId: student.id,
-      studentName: student.name,
-      testType: 'Adaptive Quiz',
-      title: `Adaptive Quiz: ${concept.name}`,
-      date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      score: totalScore,
-      totalQuestions: answers.length,
-      correctCount: answers.filter(a => a.isCorrect).length,
-      durationMinutes: Math.max(1, Math.round(answers.reduce((acc, a) => acc + a.timeSpentSeconds, 0) / 60)),
-      difficultyReached: currentDifficulty.toUpperCase(),
-      answers
-    };
-
-    onCompleteQuiz(submissionPayload);
   };
 
   return (
@@ -258,10 +320,57 @@ export const AdaptiveQuizView = ({ student, targetConceptId = 'c4', onCompleteQu
         </div>
       </div>
 
+      {/* Loading State for Dynamic Generation */}
+      {isLoadingQuestion && (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-md p-10 text-center flex flex-col items-center justify-center space-y-3">
+          <Loader2 className="w-8 h-8 text-indigo-600 animate-spin" />
+          <h4 className="text-sm font-bold text-slate-800">Generating Dynamic Question via AI...</h4>
+          <p className="text-xs text-slate-500">
+            Calibrating real-time difficulty to <strong>{currentDifficulty.toUpperCase()}</strong> tier.
+          </p>
+        </div>
+      )}
+
+      {/* Evaluating Progress State */}
+      {isEvaluating && (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-md p-10 text-center flex flex-col items-center justify-center space-y-3">
+          <Loader2 className="w-8 h-8 text-emerald-600 animate-spin" />
+          <h4 className="text-sm font-bold text-slate-800">Evaluating Dynamic Performance & Trajectory...</h4>
+          <p className="text-xs text-slate-500">
+            Computing mastery deltas, analyzing cognitive traps, and generating personalized prescription.
+          </p>
+        </div>
+      )}
+
       {/* Active Question Box */}
-      {activeQuestion && (
+      {!isLoadingQuestion && !isEvaluating && activeQuestion && (
         <div className="bg-white rounded-2xl border border-slate-200 shadow-md p-6 sm:p-8 animate-in fade-in duration-150">
           
+          {/* Question Meta Header with Dynamic Badge */}
+          <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-slate-400">
+                Question {sessionAnswers.length + (isAnswerSubmitted ? 0 : 1)} of {maxQuestions}
+              </span>
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-slate-100 text-slate-700">
+                {concept.name}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {activeQuestion.isDynamic ? (
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-700 border border-purple-200">
+                  <Sparkles className="w-3 h-3 text-purple-600" />
+                  <span>AI Dynamic Item</span>
+                </span>
+              ) : (
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700">
+                  Adaptive Item
+                </span>
+              )}
+            </div>
+          </div>
+
           {/* Question Prompt */}
           <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug mb-6">
             {activeQuestion.question}
@@ -391,6 +500,18 @@ export const AdaptiveQuizView = ({ student, targetConceptId = 'c4', onCompleteQu
 
         </div>
       )}
+
+      {/* Dynamic Quiz Evaluation Modal */}
+      <DynamicEvaluationModal
+        isOpen={showEvaluationModal}
+        onClose={() => setShowEvaluationModal(false)}
+        evaluation={evaluationResult?.evaluation}
+        student={student}
+        testTitle={`Adaptive Quiz Evaluation: ${concept.name}`}
+        onProceed={() => {
+          onCompleteQuiz(evaluationResult?.submission, evaluationResult?.student);
+        }}
+      />
 
     </div>
   );

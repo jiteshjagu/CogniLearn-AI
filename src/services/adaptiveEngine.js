@@ -295,5 +295,258 @@ export const AdaptiveEngine = {
       testsTaken: (student.testsTaken || 0) + 1,
       lastActive: new Date().toLocaleDateString()
     };
+  },
+
+  /**
+   * Comprehensive Dynamic Result Evaluation & Progress Tracker
+   * Evaluates accuracy, weighted difficulty, concept mastery deltas, misconception diagnostics,
+   * learning velocity, and generates AI/pedagogical prescriptions.
+   */
+  evaluateAssessmentResult: (student, { answers = [], testType = 'Adaptive Quiz', title = '', durationMinutes = 5 }) => {
+    const totalQuestions = answers.length || 1;
+    const correctCount = answers.filter(a => a.isCorrect).length;
+    const rawAccuracy = Math.round((correctCount / totalQuestions) * 100);
+
+    let earnedWeightedPoints = 0;
+    let totalWeightedPoints = 0;
+    let totalTimeSeconds = 0;
+
+    answers.forEach(a => {
+      const weight = a.difficulty === 'hard' ? 3 : a.difficulty === 'medium' ? 2 : 1;
+      totalWeightedPoints += weight;
+      if (a.isCorrect) earnedWeightedPoints += weight;
+      totalTimeSeconds += (a.timeSpentSeconds || 15);
+    });
+
+    const weightedScore = totalWeightedPoints > 0 
+      ? Math.round((earnedWeightedPoints / totalWeightedPoints) * 100) 
+      : rawAccuracy;
+
+    const avgTimePerQuestion = Math.round(totalTimeSeconds / totalQuestions);
+
+    let grade = 'Developing';
+    if (weightedScore >= 90) grade = 'Exemplary Mastery';
+    else if (weightedScore >= 75) grade = 'Proficient';
+    else if (weightedScore >= 60) grade = 'Functional Foundation';
+    else grade = 'Requires Targeted Intervention';
+
+    const previousConceptMastery = { ...(student.conceptMastery || {}) };
+    const updatedConceptMastery = { ...previousConceptMastery };
+
+    const conceptPerformance = {};
+    answers.forEach(ans => {
+      const cId = ans.conceptId || 'c4';
+      if (!conceptPerformance[cId]) {
+        conceptPerformance[cId] = { correct: 0, total: 0, time: 0, errors: [] };
+      }
+      conceptPerformance[cId].total += 1;
+      conceptPerformance[cId].time += (ans.timeSpentSeconds || 15);
+      if (ans.isCorrect) {
+        conceptPerformance[cId].correct += 1;
+      } else {
+        conceptPerformance[cId].errors.push(ans);
+      }
+    });
+
+    const conceptDeltas = [];
+    Object.keys(conceptPerformance).forEach(cId => {
+      const perf = conceptPerformance[cId];
+      const testScore = Math.round((perf.correct / perf.total) * 100);
+      const prev = previousConceptMastery[cId] ?? 50;
+
+      let updated;
+      if (testType === 'Diagnostic Assessment') {
+        updated = testScore;
+      } else {
+        updated = Math.min(100, Math.max(0, Math.round(prev * 0.40 + testScore * 0.60)));
+      }
+      updatedConceptMastery[cId] = updated;
+
+      const delta = updated - prev;
+      let statusLabel = 'Steady';
+      if (prev < 60 && updated >= 60) {
+        statusLabel = 'Resolved Gap! 🎉';
+      } else if (delta > 10) {
+        statusLabel = 'Rapid Progress 🚀';
+      } else if (delta > 0) {
+        statusLabel = 'Improving 📈';
+      } else if (delta < 0) {
+        statusLabel = 'Needs Reinforcement ⚠️';
+      }
+
+      conceptDeltas.push({
+        conceptId: cId,
+        conceptName: CONCEPTS[cId]?.name || cId,
+        previousMastery: prev,
+        newMastery: updated,
+        delta: (delta >= 0 ? `+${delta}%` : `${delta}%`),
+        numericDelta: delta,
+        testAccuracy: testScore,
+        questionsCount: perf.total,
+        status: statusLabel
+      });
+    });
+
+    const previousOverallMastery = student.overallMastery || 0;
+    const allMasteries = Object.values(updatedConceptMastery);
+    const newOverallMastery = Math.round(
+      allMasteries.reduce((a, b) => a + b, 0) / (allMasteries.length || 1)
+    );
+    const overallDelta = newOverallMastery - previousOverallMastery;
+
+    const previousGaps = student.criticalGaps || [];
+    const newCriticalGaps = Object.keys(updatedConceptMastery).filter(
+      cId => updatedConceptMastery[cId] < 60
+    );
+
+    const resolvedGaps = previousGaps.filter(g => !newCriticalGaps.includes(g));
+    const persistentGaps = previousGaps.filter(g => newCriticalGaps.includes(g));
+    const newlyIdentifiedGaps = newCriticalGaps.filter(g => !previousGaps.includes(g));
+
+    let rootPrerequisiteBottleneck = null;
+    for (const gapId of newCriticalGaps) {
+      const prereqs = CONCEPTS[gapId]?.prerequisites || [];
+      const failingPrereq = prereqs.find(pId => newCriticalGaps.includes(pId));
+      if (failingPrereq) {
+        rootPrerequisiteBottleneck = failingPrereq;
+        break;
+      } else if (!rootPrerequisiteBottleneck) {
+        rootPrerequisiteBottleneck = gapId;
+      }
+    }
+
+    const incorrectAnswers = answers.filter(a => !a.isCorrect);
+    const cognitiveDiagnoses = [];
+
+    incorrectAnswers.forEach(ans => {
+      const concept = CONCEPTS[ans.conceptId];
+      const selectedText = ans.options ? ans.options[ans.studentAnswerIndex] : 'Chosen Option';
+      const correctText = ans.options ? ans.options[ans.correctIndex] : 'Correct Option';
+
+      let trapTitle = 'Conceptual Misapplication';
+      let trapExplanation = ans.misconceptionAnalysis || ans.explanation || 'Distractor option selected.';
+      let remedy = 'Double-check inverse mathematical operations.';
+
+      const qText = (ans.question || '').toLowerCase();
+      if (qText.includes('factor') || ans.conceptId === 'c4') {
+        trapTitle = 'Binomial Sign / Factoring Trap';
+        remedy = 'Multiply the outer and inner terms of your binomial factors to verify they reconstruct the middle coefficient.';
+      } else if (qText.includes('pemdas') || qText.includes('order of operations') || ans.conceptId === 'c1') {
+        trapTitle = 'Precedence Hierarchy Slip';
+        remedy = 'Execute all multiplication and division before performing any addition or subtraction.';
+      } else if (qText.includes('inequality') || qText.includes('≤') || qText.includes('≥')) {
+        trapTitle = 'Inequality Negative Inversion Trap';
+        remedy = 'Always flip the direction of the inequality (≤ becomes ≥) when dividing by a negative number.';
+      } else if (qText.includes('vertex') || ans.conceptId === 'c6') {
+        trapTitle = 'Vertex Sign Inversion Error';
+        remedy = 'In vertex form y = a(x - h)² + k, the horizontal vertex coordinate has the opposite sign: (h, k).';
+      }
+
+      cognitiveDiagnoses.push({
+        questionId: ans.questionId,
+        conceptId: ans.conceptId,
+        conceptName: concept?.name || 'Algebra',
+        question: ans.question,
+        selectedOption: selectedText,
+        correctOption: correctText,
+        trapTitle,
+        trapExplanation,
+        remedy
+      });
+    });
+
+    let learningVelocity = 'Steady';
+    if (weightedScore >= 80 && avgTimePerQuestion <= 25) {
+      learningVelocity = 'Accelerating 🚀';
+    } else if (weightedScore >= 75) {
+      learningVelocity = 'Steady';
+    } else if (avgTimePerQuestion > 45 && weightedScore >= 60) {
+      learningVelocity = 'Deliberate & Methodical';
+    } else {
+      learningVelocity = 'Needs Support';
+    }
+
+    let status = 'On Track';
+    if (newCriticalGaps.length >= 2 || newOverallMastery < 55) {
+      status = 'Needs Intervention';
+    } else if (newOverallMastery >= 85) {
+      status = 'Mastering';
+    }
+
+    const strengthsList = conceptDeltas
+      .filter(d => d.newMastery >= 70 || d.numericDelta > 15)
+      .map(d => `${d.conceptName} (${d.newMastery}% mastery)`);
+
+    const focusList = newCriticalGaps.map(g => CONCEPTS[g]?.name || g);
+
+    const prescription = {
+      summary: overallDelta >= 0
+        ? `Impressive progress! Student gained ${overallDelta >= 0 ? '+' : ''}${overallDelta}% overall mastery during this assessment.`
+        : `Diagnostic assessment complete. Baseline calibrated across foundational competencies.`,
+      strengths: strengthsList.length > 0 ? strengthsList : ['Arithmetic Fundamentals'],
+      focusAreas: focusList.length > 0 ? focusList : ['Advanced Polynomial Analysis'],
+      recommendedAction: rootPrerequisiteBottleneck 
+        ? `Focus next sprint on ${CONCEPTS[rootPrerequisiteBottleneck]?.name || rootPrerequisiteBottleneck} to resolve the critical bottleneck unlocking higher-level units.`
+        : 'Continue to advanced non-linear algebra and polynomial functions.',
+      mentorInsight: resolvedGaps.length > 0 
+        ? `Student successfully overcame ${resolvedGaps.map(g => CONCEPTS[g]?.name || g).join(', ')}. Readiness to tackle downstream topics increased.`
+        : `Student is calibrating baseline performance. Recommended to assign targeted remedial practice for ${newCriticalGaps.map(g => CONCEPTS[g]?.name || g).join(', ')}.`
+    };
+
+    const evaluation = {
+      score: weightedScore,
+      rawAccuracy,
+      grade,
+      previousOverallMastery,
+      newOverallMastery,
+      overallDelta: (overallDelta >= 0 ? `+${overallDelta}%` : `${overallDelta}%`),
+      numericDelta: overallDelta,
+      avgTimePerQuestion,
+      learningVelocity,
+      conceptDeltas,
+      cognitiveDiagnoses,
+      resolvedGaps: resolvedGaps.map(g => CONCEPTS[g]?.name || g),
+      persistentGaps: persistentGaps.map(g => CONCEPTS[g]?.name || g),
+      newlyIdentifiedGaps: newlyIdentifiedGaps.map(g => CONCEPTS[g]?.name || g),
+      rootPrerequisiteBottleneck,
+      rootBottleneckName: rootPrerequisiteBottleneck ? CONCEPTS[rootPrerequisiteBottleneck]?.name : null,
+      prescription
+    };
+
+    const updatedStudent = {
+      ...student,
+      initialTestTaken: true,
+      overallMastery: newOverallMastery,
+      conceptMastery: updatedConceptMastery,
+      criticalGaps: newCriticalGaps,
+      rootPrerequisiteBottleneck,
+      status,
+      learningVelocity,
+      testsTaken: (student.testsTaken || 0) + 1,
+      lastActive: new Date().toLocaleDateString()
+    };
+
+    const submissionRecord = {
+      id: `sub_${Date.now()}_${Math.random().toString(36).substring(2, 5)}`,
+      studentId: student.id,
+      studentName: student.name,
+      testType,
+      title: title || `${testType} - ${new Date().toLocaleDateString()}`,
+      date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      score: weightedScore,
+      rawAccuracy,
+      totalQuestions,
+      correctCount,
+      durationMinutes: Math.max(1, durationMinutes || Math.round(totalTimeSeconds / 60)),
+      difficultyReached: answers[answers.length - 1]?.difficulty?.toUpperCase() || 'MEDIUM',
+      answers,
+      evaluation
+    };
+
+    return {
+      evaluation,
+      student: updatedStudent,
+      submission: submissionRecord
+    };
   }
 };

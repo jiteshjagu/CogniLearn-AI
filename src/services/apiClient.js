@@ -2,6 +2,7 @@
 
 import { StorageService } from './storageService';
 import { AdaptiveEngine } from './adaptiveEngine';
+import { DynamicQuestionGenerator } from './dynamicQuestionGenerator';
 
 const API_BASE = '/api';
 
@@ -142,5 +143,73 @@ export const ApiClient = {
       if (res.ok) return await res.json();
     } catch {}
     return null;
+  },
+
+  // Generate Dynamic Question via API (with AI / procedural fallback)
+  generateDynamicQuestion: async ({ conceptId = 'c4', difficulty = 'medium', context = {} }) => {
+    try {
+      const res = await fetch(`${API_BASE}/questions/generate-dynamic`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ conceptId, difficulty, context, count: 1 })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.question) return data.question;
+      }
+    } catch {}
+    return DynamicQuestionGenerator.generateAiQuestion(conceptId, difficulty, context);
+  },
+
+  // Generate Dynamic Batch of Questions (e.g. for dynamic diagnostic)
+  generateDynamicBatch: async ({ conceptIds, difficulty = 'medium' }) => {
+    try {
+      const res = await fetch(`${API_BASE}/questions/generate-dynamic`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ count: conceptIds.length, difficulty })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.questions?.length) return data.questions;
+      }
+    } catch {}
+    return DynamicQuestionGenerator.generateBatch({ conceptIds, difficulty });
+  },
+
+  // Comprehensive Dynamic Result Evaluation & Progress Tracker API
+  evaluateAssessmentResult: async (student, payload) => {
+    try {
+      const res = await fetch(`${API_BASE}/assessment/evaluate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          studentId: student.id,
+          ...payload
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.evaluation) {
+          // Sync local storage as well
+          StorageService.updateStudent(student.id, data.student);
+          StorageService.addSubmission(data.submission);
+          return data;
+        }
+      }
+    } catch (e) {
+      console.warn('Backend evaluation unavailable, executing local adaptive evaluation:', e.message);
+    }
+
+    // Local execution fallback
+    const result = AdaptiveEngine.evaluateAssessmentResult(student, payload);
+    StorageService.updateStudent(student.id, result.student);
+    StorageService.addSubmission(result.submission);
+    return {
+      success: true,
+      evaluation: result.evaluation,
+      student: result.student,
+      submission: result.submission
+    };
   }
 };

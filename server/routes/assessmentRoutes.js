@@ -4,6 +4,41 @@ import { AdaptiveEngineBackend } from '../services/adaptiveEngineBackend.js';
 
 export const assessmentRouter = Router();
 
+// POST: Comprehensive Dynamic Result Evaluation & Progress Tracker
+assessmentRouter.post('/evaluate', (req, res) => {
+  const { studentId, answers, testType = 'Adaptive Quiz', title, durationMinutes = 5 } = req.body;
+
+  if (!studentId || !Array.isArray(answers)) {
+    return res.status(400).json({ error: 'studentId and answers array are required' });
+  }
+
+  const student = db.getStudentById(studentId);
+  if (!student) {
+    return res.status(404).json({ error: 'Student not found' });
+  }
+
+  // Run dynamic evaluation
+  const result = AdaptiveEngineBackend.evaluateAssessmentResult(student, {
+    answers,
+    testType,
+    title,
+    durationMinutes
+  });
+
+  // Save updated student in db
+  db.updateStudent(student.id, result.student);
+
+  // Save submission in db
+  const savedSubmission = db.addSubmission(result.submission);
+
+  res.json({
+    success: true,
+    evaluation: result.evaluation,
+    student: result.student,
+    submission: savedSubmission
+  });
+});
+
 // POST: Process Diagnostic Assessment
 assessmentRouter.post('/diagnostic', (req, res) => {
   const { studentId, answers } = req.body;
