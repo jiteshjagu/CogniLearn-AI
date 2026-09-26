@@ -1,7 +1,15 @@
-// AI Learning Support Service (Gemini API Integration + Offline Pedagogical Knowledge Engine)
+// AI Learning Support Service (Gemini API Integration from Environment + Offline Pedagogical Knowledge Engine)
 
 import { CONCEPTS, CONCEPT_LESSONS } from '../data/conceptsData';
-import { StorageService } from './storageService';
+
+// Reads API key directly from code environment variables (.env)
+const getApiKey = () => {
+  return (
+    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) ||
+    (typeof process !== 'undefined' && process.env?.GEMINI_API_KEY) ||
+    ''
+  );
+};
 
 export const AiTutorService = {
   /**
@@ -10,7 +18,7 @@ export const AiTutorService = {
   explainConcept: async (conceptId, style = 'standard') => {
     const concept = CONCEPTS[conceptId];
     const lesson = CONCEPT_LESSONS[conceptId];
-    const apiKey = StorageService.getApiKey();
+    const apiKey = getApiKey();
 
     if (apiKey) {
       try {
@@ -58,7 +66,7 @@ Always verify your answer by expanding or substituting test values back into the
    */
   explainMistake: async (questionObj, chosenOption, correctOption, studentConceptMastery = 50) => {
     const concept = CONCEPTS[questionObj.conceptId];
-    const apiKey = StorageService.getApiKey();
+    const apiKey = getApiKey();
 
     if (apiKey) {
       try {
@@ -110,7 +118,7 @@ Review the prerequisite concept: **${concept?.prerequisites?.[0] ? CONCEPTS[conc
    * Interactive AI tutor dialog response
    */
   askTutor: async (userMessage, context = {}) => {
-    const apiKey = StorageService.getApiKey();
+    const apiKey = getApiKey();
 
     if (apiKey) {
       try {
