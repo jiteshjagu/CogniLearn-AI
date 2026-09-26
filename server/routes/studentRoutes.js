@@ -20,6 +20,23 @@ studentRouter.get('/', (req, res) => {
   res.json(students);
 });
 
+// POST create new student
+studentRouter.post('/', (req, res) => {
+  const { name, email, classId } = req.body;
+  if (!name || !email) {
+    return res.status(400).json({ error: 'Name and email are required' });
+  }
+
+  // Check if student with email already exists
+  const existing = db.getStudents().find(s => s.email.toLowerCase() === email.trim().toLowerCase());
+  if (existing) {
+    return res.status(409).json({ error: 'A student with this email already exists', student: existing });
+  }
+
+  const newStudent = db.addStudent({ name, email, classId });
+  res.status(201).json(newStudent);
+});
+
 // GET single student
 studentRouter.get('/:id', (req, res) => {
   const student = db.getStudentById(req.params.id);

@@ -63,6 +63,31 @@ export const StorageService = {
     return null;
   },
 
+  addStudent: (studentData) => {
+    const students = StorageService.getStudents();
+    const newStudent = {
+      id: studentData.id || `s_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+      name: studentData.name?.trim() || 'New Student',
+      email: studentData.email?.trim().toLowerCase(),
+      classId: studentData.classId || 'class-a',
+      avatar: studentData.avatar || `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80`,
+      initialTestTaken: false,
+      overallMastery: 0,
+      learningVelocity: 'Uncalibrated',
+      status: 'Diagnostic Pending',
+      testsTaken: 0,
+      conceptMastery: {
+        'c1': 0, 'c2': 0, 'c3': 0, 'c4': 0, 'c5': 0, 'c6': 0, 'c7': 0
+      },
+      criticalGaps: [],
+      rootPrerequisiteBottleneck: null,
+      mentorNotes: []
+    };
+    students.unshift(newStudent);
+    localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(students));
+    return newStudent;
+  },
+
   getMentors: () => {
     try {
       const data = localStorage.getItem(STORAGE_KEYS.MENTORS);

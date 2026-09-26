@@ -3,7 +3,6 @@ import {
   Users, 
   GraduationCap, 
   ArrowLeft, 
-  LogOut, 
   CheckCircle2, 
   XCircle, 
   AlertTriangle, 
@@ -18,20 +17,36 @@ import {
   Layers,
   HelpCircle,
   TrendingUp,
-  Brain
+  Brain,
+  UserPlus,
+  X,
+  Mail,
+  User
 } from 'lucide-react';
 import { CONCEPTS, CONCEPT_LIST } from '../../data/conceptsData';
 import { StorageService } from '../../services/storageService';
+import { ApiClient } from '../../services/apiClient';
 
 export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent }) => {
   const [students, setStudents] = useState(StorageService.getStudents());
   const [classes, setClasses] = useState(StorageService.getClasses());
   const [selectedClassFilter, setSelectedClassFilter] = useState('all');
-  const [selectedStudentId, setSelectedStudentId] = useState('s1'); // default to Alex Rivera to show rich data immediately
-  const [selectedSubmissionId, setSelectedSubmissionId] = useState('sub_s1_01');
+  
+  // Default to null so the mentor SEES all students' names first
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const [selectedSubmissionId, setSelectedSubmissionId] = useState(null);
+  
   const [mentorNoteInput, setMentorNoteInput] = useState('');
   const [noteSuccess, setNoteSuccess] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Add Student Modal State
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [newEmail, setNewEmail] = useState('');
+  const [newClassId, setNewClassId] = useState('class-a');
+  const [modalError, setModalError] = useState('');
+  const [modalSuccess, setModalSuccess] = useState('');
 
   // Mentors assigned classes
   const assignedClassIds = currentUser?.assignedClasses || ['class-a', 'class-b'];
@@ -42,13 +57,19 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
     const isInMentorClass = assignedClassIds.includes(s.classId);
     if (!isInMentorClass) return false;
     if (selectedClassFilter !== 'all' && s.classId !== selectedClassFilter) return false;
-    if (searchQuery && !s.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    if (searchQuery && !s.name.toLowerCase().includes(searchQuery.toLowerCase()) && !s.email.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     return true;
   });
 
   const selectedStudent = students.find(s => s.id === selectedStudentId);
   const studentSubmissions = selectedStudent ? StorageService.getSubmissionsByStudent(selectedStudent.id) : [];
   const selectedSubmission = studentSubmissions.find(sub => sub.id === selectedSubmissionId) || studentSubmissions[0];
+
+  const handleOpenStudentReport = (student) => {
+    setSelectedStudentId(student.id);
+    const subs = StorageService.getSubmissionsByStudent(student.id);
+    setSelectedSubmissionId(subs[0]?.id || null);
+  };
 
   const handleSaveMentorNote = (e) => {
     e.preventDefault();
@@ -61,19 +82,64 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
     };
 
     const updatedNotes = [...(selectedStudent.mentorNotes || []), newNote];
-    const updated = StorageService.updateStudent(selectedStudent.id, { mentorNotes: updatedNotes });
+    StorageService.updateStudent(selectedStudent.id, { mentorNotes: updatedNotes });
+    ApiClient.addMentorNote(selectedStudent.id, mentorNoteInput.trim(), currentUser?.name);
     
-    // Update local state
     setStudents(StorageService.getStudents());
     setMentorNoteInput('');
     setNoteSuccess(true);
     setTimeout(() => setNoteSuccess(false), 2000);
   };
 
+  const handleAddStudentSubmit = (e) => {
+    e.preventDefault();
+    setModalError('');
+    setModalSuccess('');
+
+    if (!newName.trim() || !newEmail.trim()) {
+      setModalError('Please enter both student name and email address.');
+      return;
+    }
+
+    // Verify email format (e.g. xyz@gmail.com)
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(newEmail.trim().toLowerCase())) {
+      setModalError('Invalid email format. Please use the correct format (example: xyz@gmail.com).');
+      return;
+    }
+
+    // Check if email already registered
+    const existing = StorageService.getStudents().find(
+      s => s.email.toLowerCase() === newEmail.trim().toLowerCase()
+    );
+    if (existing) {
+      setModalError('A student with this email address already exists.');
+      return;
+    }
+
+    const created = StorageService.addStudent({
+      name: newName.trim(),
+      email: newEmail.trim().toLowerCase(),
+      classId: newClassId
+    });
+
+    ApiClient.addStudent(created);
+
+    setStudents(StorageService.getStudents());
+    setModalSuccess(`Student "${created.name}" added successfully!`);
+
+    setTimeout(() => {
+      setNewName('');
+      setNewEmail('');
+      setModalSuccess('');
+      setShowAddModal(false);
+    }, 900);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50/70 pb-16">
       
-      {/* Top Banner & Navigation */}
+      {/* Top Banner & Sub-header */}
       <div className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -97,9 +163,8 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
               </div>
             </div>
 
-            {/* Top Action Buttons (Strictly includes Back option and Back to Login) */}
+            {/* Top Action Controls */}
             <div className="flex items-center gap-2.5">
-              
               {selectedStudentId && (
                 <button
                   onClick={() => {
@@ -113,6 +178,13 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
                 </button>
               )}
 
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-colors"
+              >
+                <UserPlus className="w-4 h-4" />
+                <span>Add Student</span>
+              </button>
             </div>
 
           </div>
@@ -122,28 +194,31 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
 
         {/* ------------------------------------------------------------------ */}
-        {/* VIEW 1: STUDENT ROSTER (List of students, tests given, gaps)       */}
+        {/* VIEW 1: STUDENT ROSTER (List of student names, tests given & progress) */}
         {/* ------------------------------------------------------------------ */}
         {!selectedStudentId ? (
           <div className="space-y-6">
             
-            {/* Filter and stats row */}
+            {/* Filter and Search Bar */}
             <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h2 className="text-base font-bold text-slate-900">Assigned Student Cohort</h2>
-                <p className="text-xs text-slate-500">
-                  Track student test counts, progress, and review individual question responses
+                <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <GraduationCap className="w-5 h-5 text-emerald-600" />
+                  <span>Assigned Student Cohort ({mentorStudents.length} Students)</span>
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Click on any student name to inspect their full progress report, historical tests, and question answers.
                 </p>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-2.5">
                 {/* Class selector */}
                 <select
                   value={selectedClassFilter}
                   onChange={(e) => setSelectedClassFilter(e.target.value)}
                   className="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold text-slate-700 bg-slate-50"
                 >
-                  <option value="all">All Assigned Classes ({mentorStudents.length} Students)</option>
+                  <option value="all">All Assigned Classes</option>
                   {mentorClasses.map(c => (
                     <option key={c.id} value={c.id}>{c.name} - {c.subject}</option>
                   ))}
@@ -154,61 +229,79 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
                   <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
                   <input
                     type="text"
-                    placeholder="Search name..."
+                    placeholder="Search by student name or email..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-300 w-44 focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
+                    className="pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-300 w-52 sm:w-64 focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
                   />
                 </div>
+
+                <button
+                  onClick={() => setShowAddModal(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors"
+                >
+                  <UserPlus className="w-3.5 h-3.5" />
+                  <span>+ Add Student</span>
+                </button>
               </div>
             </div>
 
-            {/* Students Table */}
+            {/* Students Table with Clickable Names */}
             <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-slate-50 text-slate-600 font-bold uppercase tracking-wider text-[10px] border-b border-slate-200">
                     <tr>
-                      <th className="py-3 px-4">Student</th>
-                      <th className="py-3 px-4">Class</th>
-                      <th className="py-3 px-4 text-center">Tests Completed</th>
-                      <th className="py-3 px-4">Progress & Mastery</th>
-                      <th className="py-3 px-4">Detected Gaps</th>
-                      <th className="py-3 px-4">Status</th>
-                      <th className="py-3 px-4 text-right">Action</th>
+                      <th className="py-3.5 px-4">Student Name</th>
+                      <th className="py-3.5 px-4">Class</th>
+                      <th className="py-3.5 px-4 text-center">Tests Given</th>
+                      <th className="py-3.5 px-4">Overall Mastery</th>
+                      <th className="py-3.5 px-4">Identified Gaps</th>
+                      <th className="py-3.5 px-4">Academic Status</th>
+                      <th className="py-3.5 px-4 text-right">Action</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {mentorStudents.map(student => {
                       const studentClass = classes.find(c => c.id === student.classId);
                       return (
-                        <tr key={student.id} className="hover:bg-slate-50/80 transition-colors">
+                        <tr 
+                          key={student.id} 
+                          onClick={() => handleOpenStudentReport(student)}
+                          className="hover:bg-emerald-50/50 cursor-pointer transition-colors group"
+                        >
+                          {/* Student Name & Avatar */}
                           <td className="py-3.5 px-4">
                             <div className="flex items-center gap-3">
                               <img
                                 src={student.avatar}
                                 alt={student.name}
-                                className="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0"
+                                className="w-10 h-10 rounded-full object-cover border border-slate-200 group-hover:border-emerald-400 shrink-0"
                               />
                               <div>
-                                <div className="font-bold text-slate-900">{student.name}</div>
+                                <div className="font-extrabold text-slate-900 group-hover:text-emerald-700 text-sm transition-colors">
+                                  {student.name}
+                                </div>
                                 <div className="text-[11px] text-slate-400">{student.email}</div>
                               </div>
                             </div>
                           </td>
 
+                          {/* Class */}
                           <td className="py-3.5 px-4">
-                            <span className="inline-block px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-700">
-                              {studentClass?.name || 'Class'}
+                            <span className="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-700">
+                              {studentClass?.name || 'Class 10-A'}
                             </span>
                           </td>
 
+                          {/* Number of Tests Given */}
                           <td className="py-3.5 px-4 text-center">
                             <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-black bg-emerald-50 text-emerald-700 border border-emerald-200">
                               {student.testsTaken} tests given
                             </span>
                           </td>
 
+                          {/* Progress & Mastery */}
                           <td className="py-3.5 px-4">
                             <div className="w-36">
                               <div className="flex items-center justify-between text-[11px] font-bold mb-1">
@@ -230,6 +323,7 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
                             </div>
                           </td>
 
+                          {/* Detected Gaps */}
                           <td className="py-3.5 px-4">
                             {student.criticalGaps && student.criticalGaps.length > 0 ? (
                               <div className="flex flex-wrap gap-1 max-w-xs">
@@ -246,6 +340,7 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
                             )}
                           </td>
 
+                          {/* Status */}
                           <td className="py-3.5 px-4">
                             <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold ${
                               student.status === 'Needs Intervention'
@@ -258,22 +353,31 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
                             </span>
                           </td>
 
+                          {/* Action Button */}
                           <td className="py-3.5 px-4 text-right">
                             <button
-                              onClick={() => {
-                                setSelectedStudentId(student.id);
-                                const subs = StorageService.getSubmissionsByStudent(student.id);
-                                setSelectedSubmissionId(subs[0]?.id || null);
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleOpenStudentReport(student);
                               }}
                               className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-colors"
                             >
-                              <span>Inspect Answers</span>
+                              <span>View Progress Report & Answers</span>
                               <ChevronRight className="w-3.5 h-3.5" />
                             </button>
                           </td>
                         </tr>
                       );
                     })}
+
+                    {mentorStudents.length === 0 && (
+                      <tr>
+                        <td colSpan={7} className="py-8 text-center text-slate-400 text-xs">
+                          No students matching your filter. Click "+ Add Student" to register a new student.
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -282,7 +386,7 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
           </div>
         ) : (
           /* ------------------------------------------------------------------ */
-          /* VIEW 2: DETAILED STUDENT DRILLDOWN & QUESTION-BY-QUESTION INSPECTOR */
+          /* VIEW 2: DETAILED STUDENT PROGRESS REPORT & QUESTION INSPECTOR      */
           /* ------------------------------------------------------------------ */
           selectedStudent && (
             <div className="space-y-6 animate-in fade-in duration-200">
@@ -297,7 +401,7 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 text-xs font-bold shadow-2xs transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  <span>Back to All Students</span>
+                  <span>Back to Student Roster</span>
                 </button>
 
                 <div className="flex items-center gap-2">
@@ -329,7 +433,7 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
                         </span>
                       </div>
                       <p className="text-xs text-slate-500 mt-0.5">
-                        {selectedStudent.email} • Enrolled in {classes.find(c => c.id === selectedStudent.classId)?.name}
+                        {selectedStudent.email} • Enrolled in {classes.find(c => c.id === selectedStudent.classId)?.name || 'Class 10-A'}
                       </p>
                       <div className="flex items-center gap-3 mt-2 text-xs">
                         <span className="font-semibold text-slate-700">
@@ -449,9 +553,12 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
                     ))}
 
                     {studentSubmissions.length === 0 && (
-                      <p className="text-xs text-slate-400 text-center py-6">
-                        No tests recorded yet for this student.
-                      </p>
+                      <div className="text-center py-6 px-3 bg-slate-50 rounded-xl border border-slate-200">
+                        <p className="text-xs font-semibold text-slate-600">No tests taken yet</p>
+                        <p className="text-[11px] text-slate-400 mt-1">
+                          This student has not submitted any assessments yet.
+                        </p>
+                      </div>
                     )}
                   </div>
 
@@ -509,111 +616,127 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
                         <span>Question & Answer Deep Inspector</span>
                       </h3>
                       <p className="text-xs text-slate-500">
-                        Inspecting responses for: <strong className="text-slate-700">{selectedSubmission?.title}</strong>
+                        {selectedSubmission ? (
+                          <>Inspecting responses for: <strong className="text-slate-700">{selectedSubmission.title}</strong></>
+                        ) : (
+                          'Awaiting student test submission'
+                        )}
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">
-                        {selectedSubmission?.answers?.filter(a => a.isCorrect).length} Correct
-                      </span>
-                      <span className="text-xs font-bold text-red-700 bg-red-50 border border-red-200 px-2.5 py-1 rounded-lg">
-                        {selectedSubmission?.answers?.filter(a => !a.isCorrect).length} Incorrect
-                      </span>
-                    </div>
+                    {selectedSubmission && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">
+                          {selectedSubmission.answers?.filter(a => a.isCorrect).length || 0} Correct
+                        </span>
+                        <span className="text-xs font-bold text-red-700 bg-red-50 border border-red-200 px-2.5 py-1 rounded-lg">
+                          {selectedSubmission.answers?.filter(a => !a.isCorrect).length || 0} Incorrect
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   {/* List of Questions with Student's Answer vs Correct Answer */}
-                  <div className="space-y-4 max-h-[750px] overflow-y-auto pr-1">
-                    {selectedSubmission?.answers?.map((ans, idx) => (
-                      <div
-                        key={idx}
-                        className={`p-4 rounded-xl border transition-all ${
-                          ans.isCorrect
-                            ? 'bg-emerald-50/20 border-emerald-200'
-                            : 'bg-red-50/25 border-red-200'
-                        }`}
-                      >
-                        {/* Question Meta Header */}
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold text-slate-400">#{idx + 1}</span>
-                            <span className="text-xs font-bold text-slate-800">{ans.conceptName}</span>
-                            <span className={`px-2 py-0.2 rounded text-[10px] font-bold uppercase ${
-                              ans.difficulty === 'hard'
-                                ? 'bg-purple-100 text-purple-700'
-                                : ans.difficulty === 'medium'
-                                  ? 'bg-blue-100 text-blue-700'
-                                  : 'bg-slate-100 text-slate-700'
-                            }`}>
-                              {ans.difficulty}
-                            </span>
+                  {selectedSubmission?.answers && selectedSubmission.answers.length > 0 ? (
+                    <div className="space-y-4 max-h-[750px] overflow-y-auto pr-1">
+                      {selectedSubmission.answers.map((ans, idx) => (
+                        <div
+                          key={idx}
+                          className={`p-4 rounded-xl border transition-all ${
+                            ans.isCorrect
+                              ? 'bg-emerald-50/20 border-emerald-200'
+                              : 'bg-red-50/25 border-red-200'
+                          }`}
+                        >
+                          {/* Question Meta Header */}
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-bold text-slate-400">#{idx + 1}</span>
+                              <span className="text-xs font-bold text-slate-800">{ans.conceptName}</span>
+                              <span className={`px-2 py-0.2 rounded text-[10px] font-bold uppercase ${
+                                ans.difficulty === 'hard'
+                                  ? 'bg-purple-100 text-purple-700'
+                                  : ans.difficulty === 'medium'
+                                    ? 'bg-blue-100 text-blue-700'
+                                    : 'bg-slate-100 text-slate-700'
+                              }`}>
+                                {ans.difficulty}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-2 text-xs">
+                              <span className="text-slate-400 flex items-center gap-1 text-[11px]">
+                                <Clock className="w-3 h-3" /> {ans.timeSpentSeconds}s
+                              </span>
+                              {ans.isCorrect ? (
+                                <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-100/70 px-2 py-0.5 rounded-full">
+                                  <CheckCircle2 className="w-3.5 h-3.5" /> Correct
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 text-xs font-bold text-red-600 bg-red-100/70 px-2 py-0.5 rounded-full">
+                                  <XCircle className="w-3.5 h-3.5" /> Incorrect
+                                </span>
+                              )}
+                            </div>
                           </div>
 
-                          <div className="flex items-center gap-2 text-xs">
-                            <span className="text-slate-400 flex items-center gap-1 text-[11px]">
-                              <Clock className="w-3 h-3" /> {ans.timeSpentSeconds}s
-                            </span>
-                            {ans.isCorrect ? (
-                              <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-100/70 px-2 py-0.5 rounded-full">
-                                <CheckCircle2 className="w-3.5 h-3.5" /> Correct
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center gap-1 text-xs font-bold text-red-600 bg-red-100/70 px-2 py-0.5 rounded-full">
-                                <XCircle className="w-3.5 h-3.5" /> Incorrect
-                              </span>
-                            )}
+                          {/* Question Prompt */}
+                          <p className="text-xs sm:text-sm font-semibold text-slate-900 mb-3">
+                            {ans.question}
+                          </p>
+
+                          {/* Options Comparison */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
+                            {ans.options?.map((opt, optIdx) => {
+                              const isStudentPick = optIdx === ans.studentAnswerIndex;
+                              const isCorrectAnswer = optIdx === ans.correctIndex;
+
+                              return (
+                                <div
+                                  key={optIdx}
+                                  className={`p-2.5 rounded-lg text-xs flex items-center justify-between border ${
+                                    isStudentPick && isCorrectAnswer
+                                      ? 'bg-emerald-100/80 border-emerald-400 text-emerald-900 font-bold'
+                                      : isStudentPick && !isCorrectAnswer
+                                        ? 'bg-red-100 border-red-300 text-red-900 font-bold'
+                                        : isCorrectAnswer
+                                          ? 'bg-emerald-50 border-emerald-300 text-emerald-800 font-bold'
+                                          : 'bg-white border-slate-200 text-slate-600'
+                                  }`}
+                                >
+                                  <span className="truncate">{opt}</span>
+                                  {isStudentPick && !isCorrectAnswer && (
+                                    <span className="shrink-0 text-[10px] uppercase font-bold text-red-700 bg-red-200 px-1.5 py-0.5 rounded ml-1">
+                                      Student Answer
+                                    </span>
+                                  )}
+                                  {isCorrectAnswer && (
+                                    <span className="shrink-0 text-[10px] uppercase font-bold text-emerald-700 bg-emerald-200 px-1.5 py-0.5 rounded ml-1">
+                                      Correct Solution
+                                    </span>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          {/* Pedagogical Explanation & Error Breakdown */}
+                          <div className="text-[11px] p-2.5 rounded-lg bg-white border border-slate-200 text-slate-600">
+                            <strong className="text-slate-800">Pedagogical Analysis: </strong>
+                            {ans.explanation}
                           </div>
                         </div>
-
-                        {/* Question Prompt */}
-                        <p className="text-xs sm:text-sm font-semibold text-slate-900 mb-3">
-                          {ans.question}
-                        </p>
-
-                        {/* Options Comparison */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
-                          {ans.options?.map((opt, optIdx) => {
-                            const isStudentPick = optIdx === ans.studentAnswerIndex;
-                            const isCorrectAnswer = optIdx === ans.correctIndex;
-
-                            return (
-                              <div
-                                key={optIdx}
-                                className={`p-2.5 rounded-lg text-xs flex items-center justify-between border ${
-                                  isStudentPick && isCorrectAnswer
-                                    ? 'bg-emerald-100/80 border-emerald-400 text-emerald-900 font-bold'
-                                    : isStudentPick && !isCorrectAnswer
-                                      ? 'bg-red-100 border-red-300 text-red-900 font-bold'
-                                      : isCorrectAnswer
-                                        ? 'bg-emerald-50 border-emerald-300 text-emerald-800 font-bold'
-                                        : 'bg-white border-slate-200 text-slate-600'
-                                }`}
-                              >
-                                <span className="truncate">{opt}</span>
-                                {isStudentPick && !isCorrectAnswer && (
-                                  <span className="shrink-0 text-[10px] uppercase font-bold text-red-700 bg-red-200 px-1.5 py-0.5 rounded ml-1">
-                                    Student Answer
-                                  </span>
-                                )}
-                                {isCorrectAnswer && (
-                                  <span className="shrink-0 text-[10px] uppercase font-bold text-emerald-700 bg-emerald-200 px-1.5 py-0.5 rounded ml-1">
-                                    Correct Solution
-                                  </span>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-
-                        {/* Pedagogical Explanation & Error Breakdown */}
-                        <div className="text-[11px] p-2.5 rounded-lg bg-white border border-slate-200 text-slate-600">
-                          <strong className="text-slate-800">Pedagogical Analysis: </strong>
-                          {ans.explanation}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-16 text-slate-400">
+                      <FileText className="w-10 h-10 mx-auto text-slate-300 mb-2" />
+                      <p className="text-sm font-semibold text-slate-600">No test questions to inspect yet</p>
+                      <p className="text-xs text-slate-400 mt-1">
+                        Once this student completes a diagnostic or adaptive quiz, their answers will appear here in detail.
+                      </p>
+                    </div>
+                  )}
 
                 </div>
 
@@ -624,6 +747,121 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
         )}
 
       </div>
+
+      {/* Add New Student Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                  <UserPlus className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">Add New Student</h3>
+                  <p className="text-xs text-slate-500">Register a student to your mentorship roster</p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowAddModal(false)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {modalError && (
+              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 shrink-0" />
+                <span>{modalError}</span>
+              </div>
+            )}
+
+            {modalSuccess && (
+              <div className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 shrink-0" />
+                <span>{modalSuccess}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleAddStudentSubmit} className="space-y-4 text-xs">
+              <div>
+                <label className="block font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                  Student Full Name
+                </label>
+                <div className="relative rounded-xl shadow-2xs">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                    <User className="w-4 h-4" />
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    placeholder="e.g. Rohan Sharma"
+                    className="block w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                  Student Email Address <span className="font-normal text-slate-400">(format: xyz@gmail.com)</span>
+                </label>
+                <div className="relative rounded-xl shadow-2xs">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                    <Mail className="w-4 h-4" />
+                  </div>
+                  <input
+                    type="email"
+                    required
+                    value={newEmail}
+                    onChange={(e) => setNewEmail(e.target.value)}
+                    placeholder="e.g. rohan@gmail.com"
+                    className="block w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                  Assign Class
+                </label>
+                <select
+                  value={newClassId}
+                  onChange={(e) => setNewClassId(e.target.value)}
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden font-semibold text-slate-800"
+                >
+                  {classes.map(c => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} ({c.subject})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-4 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setShowAddModal(false)}
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-xs transition-colors flex items-center gap-1.5"
+                >
+                  <UserPlus className="w-3.5 h-3.5" />
+                  <span>Register Student</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
     </div>
   );

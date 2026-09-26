@@ -5,21 +5,26 @@ import {
   ShieldCheck, 
   ArrowRight, 
   Sparkles, 
-  Lock,
-  Mail,
-  AlertCircle,
-  Eye,
-  EyeOff
+  Lock, 
+  Mail, 
+  User,
+  AlertCircle, 
+  Eye, 
+  EyeOff,
+  CheckCircle2
 } from 'lucide-react';
 import { StorageService } from '../../services/storageService';
+import { ApiClient } from '../../services/apiClient';
 
 export const LoginView = ({ onLoginSuccess }) => {
   const [selectedRole, setSelectedRole] = useState('student'); // 'student' | 'mentor' | 'admin'
+  const [studentName, setStudentName] = useState('Alex Rivera');
   const [email, setEmail] = useState('alex.rivera@cognilearn.edu');
   const [password, setPassword] = useState('password123');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
 
   const students = StorageService.getStudents();
   const mentors = StorageService.getMentors();
@@ -28,8 +33,10 @@ export const LoginView = ({ onLoginSuccess }) => {
   const handleRoleChange = (role) => {
     setSelectedRole(role);
     setErrorMsg('');
+    setSuccessMsg('');
     if (role === 'student') {
       setEmail('alex.rivera@cognilearn.edu');
+      setStudentName('Alex Rivera');
     } else if (role === 'mentor') {
       setEmail('marcus.vance@cognilearn.edu');
     } else if (role === 'admin') {
@@ -37,9 +44,16 @@ export const LoginView = ({ onLoginSuccess }) => {
     }
   };
 
+  const validateEmailFormat = (emailStr) => {
+    // Regex for standard email format, e.g. xyz@gmail.com
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return re.test(String(emailStr).trim().toLowerCase());
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrorMsg('');
+    setSuccessMsg('');
 
     if (!email.trim() || !password.trim()) {
       setErrorMsg('Please enter both your email address and password.');
@@ -48,26 +62,49 @@ export const LoginView = ({ onLoginSuccess }) => {
 
     const inputEmail = email.trim().toLowerCase();
 
+    // Verify email format (e.g. xyz@gmail.com)
+    if (!validateEmailFormat(inputEmail)) {
+      setErrorMsg('Invalid email format. Please provide a valid address (example: xyz@gmail.com).');
+      return;
+    }
+
     if (selectedRole === 'student') {
-      const student = students.find(s => s.email.toLowerCase() === inputEmail);
+      const allStudents = StorageService.getStudents();
+      let student = allStudents.find(s => s.email.toLowerCase() === inputEmail);
+
       if (student) {
+        // If student exists and user typed a custom name, update the name
+        if (studentName.trim() && student.name !== studentName.trim()) {
+          student = StorageService.updateStudent(student.id, { name: studentName.trim() });
+        }
         onLoginSuccess(student, 'student');
       } else {
-        setErrorMsg('No student account found with this email. Please check your credentials or contact administration.');
+        // Automatically accept any new student name and email!
+        const finalName = studentName.trim() || inputEmail.split('@')[0];
+        const newStudent = StorageService.addStudent({
+          name: finalName,
+          email: inputEmail,
+          classId: 'class-a'
+        });
+        ApiClient.addStudent(newStudent); // sync with backend if available
+        setSuccessMsg(`Welcome, ${finalName}! Your student profile has been created.`);
+        setTimeout(() => {
+          onLoginSuccess(newStudent, 'student');
+        }, 400);
       }
     } else if (selectedRole === 'mentor') {
       const mentor = mentors.find(m => m.email.toLowerCase() === inputEmail);
       if (mentor) {
         onLoginSuccess(mentor, 'mentor');
       } else {
-        setErrorMsg('No academic mentor account found with this email. Please check your credentials.');
+        setErrorMsg('Academic Mentor not found with this email. Registered mentors: marcus.vance@cognilearn.edu or elena.rostova@cognilearn.edu');
       }
     } else if (selectedRole === 'admin') {
       const admin = admins.find(a => a.email.toLowerCase() === inputEmail);
       if (admin) {
         onLoginSuccess(admin, 'admin');
       } else {
-        setErrorMsg('No administrator account found with this email.');
+        setErrorMsg('Administrator not found with this email. Registered admin: s.jenkins@cognilearn.edu');
       }
     }
   };
@@ -77,7 +114,7 @@ export const LoginView = ({ onLoginSuccess }) => {
       case 'mentor':
         return {
           title: 'Academic Mentor Portal',
-          subtitle: 'Sign in to inspect student progress, review test question answers, and assign interventions.',
+          subtitle: 'Sign in to inspect student rosters, question answers, test counts, and assign remedial interventions.',
           buttonBg: 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-500/20 focus:ring-emerald-500',
           activeTab: 'bg-white text-emerald-700 shadow-sm border-emerald-200',
           pillBg: 'bg-emerald-100 text-emerald-800 border-emerald-200',
@@ -86,7 +123,7 @@ export const LoginView = ({ onLoginSuccess }) => {
       case 'admin':
         return {
           title: 'Administrator Command Center',
-          subtitle: 'Sign in to monitor class rosters, compare cohort performance, and view institutional analytics.',
+          subtitle: 'Sign in to inspect institutional classes, compare cohorts side-by-side, and monitor progress.',
           buttonBg: 'bg-purple-600 hover:bg-purple-700 shadow-purple-500/20 focus:ring-purple-500',
           activeTab: 'bg-white text-purple-700 shadow-sm border-purple-200',
           pillBg: 'bg-purple-100 text-purple-800 border-purple-200',
@@ -96,7 +133,7 @@ export const LoginView = ({ onLoginSuccess }) => {
       default:
         return {
           title: 'Student Learning Workspace',
-          subtitle: 'Sign in to take diagnostic tests, view prerequisite gap graphs, and practice adaptive quizzes.',
+          subtitle: 'Enter your name and email to access your adaptive learning path, diagnostic test, and quizzes.',
           buttonBg: 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/20 focus:ring-blue-500',
           activeTab: 'bg-white text-blue-700 shadow-sm border-blue-200',
           pillBg: 'bg-blue-100 text-blue-800 border-blue-200',
@@ -122,7 +159,7 @@ export const LoginView = ({ onLoginSuccess }) => {
             Sign In to CogniLearn AI
           </h1>
           <p className="mt-1 text-xs sm:text-sm text-slate-500">
-            Select your account type below to access your dedicated learning portal.
+            Select your account type below to access your learning portal.
           </p>
         </div>
 
@@ -196,12 +233,46 @@ export const LoginView = ({ onLoginSuccess }) => {
               </div>
             )}
 
-            {/* Standard Login Form */}
+            {/* Success Message Box */}
+            {successMsg && (
+              <div className="mb-5 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs flex items-start gap-2 animate-in fade-in duration-150">
+                <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600" />
+                <span>{successMsg}</span>
+              </div>
+            )}
+
+            {/* Login Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               
+              {/* Student Name Field (Accepts ANY student name) */}
+              {selectedRole === 'student' && (
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                    Student Full Name
+                  </label>
+                  <div className="relative rounded-xl shadow-2xs">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                      <User className="w-4 h-4" />
+                    </div>
+                    <input
+                      type="text"
+                      required
+                      value={studentName}
+                      onChange={(e) => setStudentName(e.target.value)}
+                      className="block w-full pl-10 pr-3 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      placeholder="e.g. Jitesh Gupta, Alex Rivera, or your name"
+                    />
+                  </div>
+                  <p className="text-[11px] text-slate-400 mt-1">
+                    Enter any student name. If you are new, an account will be created automatically.
+                  </p>
+                </div>
+              )}
+
+              {/* Email Address Field with format validation (e.g. xyz@gmail.com) */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-                  Email Address
+                  Email Address <span className="text-[11px] text-slate-400 font-normal">(format: xyz@gmail.com)</span>
                 </label>
                 <div className="relative rounded-xl shadow-2xs">
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -213,11 +284,12 @@ export const LoginView = ({ onLoginSuccess }) => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="block w-full pl-10 pr-3 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                    placeholder="name@cognilearn.edu"
+                    placeholder="e.g. xyz@gmail.com"
                   />
                 </div>
               </div>
 
+              {/* Password */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
@@ -271,14 +343,16 @@ export const LoginView = ({ onLoginSuccess }) => {
 
             </form>
 
-            {/* Quick Demo Helper Hint */}
+            {/* Helper Hint */}
             <div className="mt-6 pt-4 border-t border-slate-100 text-center">
               <p className="text-[11px] text-slate-400">
-                Authorized accounts on record:
-                <br />
-                <span className="font-semibold text-slate-600">alex.rivera@cognilearn.edu</span> (Student) •{' '}
-                <span className="font-semibold text-slate-600">marcus.vance@cognilearn.edu</span> (Mentor) •{' '}
-                <span className="font-semibold text-slate-600">s.jenkins@cognilearn.edu</span> (Admin)
+                {selectedRole === 'student' ? (
+                  <span>Students can use any name and valid email (e.g. <strong>xyz@gmail.com</strong>).</span>
+                ) : selectedRole === 'mentor' ? (
+                  <span>Mentor accounts: <strong>marcus.vance@cognilearn.edu</strong></span>
+                ) : (
+                  <span>Administrator account: <strong>s.jenkins@cognilearn.edu</strong></span>
+                )}
               </p>
             </div>
 
