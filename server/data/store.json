@@ -1,0 +1,701 @@
+{
+  "classes": [
+    {
+      "id": "class-a",
+      "name": "Class 10-A",
+      "subject": "Algorithmic Foundations & Algebra",
+      "mentorId": "m1",
+      "mentorName": "Dr. Marcus Vance",
+      "room": "Hall 302",
+      "schedule": "Mon / Wed / Fri 09:00 AM",
+      "studentIds": [
+        "s2",
+        "s3",
+        "s5",
+        "s6"
+      ],
+      "targetCurriculum": "Algebra II & Discrete Logic",
+      "academicTerm": "Fall 2026"
+    },
+    {
+      "id": "class-b",
+      "name": "Class 10-B",
+      "subject": "Applied Mathematics & Modeling",
+      "mentorId": "m1",
+      "mentorName": "Dr. Marcus Vance",
+      "room": "Hall 104",
+      "schedule": "Tue / Thu 10:30 AM",
+      "studentIds": [
+        "s1",
+        "s4"
+      ],
+      "targetCurriculum": "Algebra Foundations & Functions",
+      "academicTerm": "Fall 2026"
+    },
+    {
+      "id": "class-c",
+      "name": "Class 11-A",
+      "subject": "Advanced Functions & Pre-Calculus",
+      "mentorId": "m2",
+      "mentorName": "Dr. Elena Rostova",
+      "room": "Hall 405",
+      "schedule": "Mon / Wed 02:00 PM",
+      "studentIds": [],
+      "targetCurriculum": "Pre-Calculus & Polynomial Analysis",
+      "academicTerm": "Fall 2026"
+    }
+  ],
+  "students": [
+    {
+      "id": "s1",
+      "name": "Alex Rivera",
+      "email": "alex.rivera@cognilearn.edu",
+      "classId": "class-b",
+      "avatar": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80",
+      "initialTestTaken": true,
+      "overallMastery": 52,
+      "learningVelocity": "Moderate",
+      "status": "Needs Intervention",
+      "testsTaken": 3,
+      "conceptMastery": {
+        "c1": 85,
+        "c2": 78,
+        "c3": 60,
+        "c4": 28,
+        "c5": 32,
+        "c6": 20,
+        "c7": 45
+      },
+      "criticalGaps": [
+        "c4",
+        "c5"
+      ],
+      "rootPrerequisiteBottleneck": "c4",
+      "mentorNotes": [
+        {
+          "date": "2026-09-22",
+          "author": "Dr. Marcus Vance",
+          "note": "Struggles with binomial factoring and difference of squares. This is cascading into quadratics."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "name": "Maya Chen",
+      "email": "maya.chen@cognilearn.edu",
+      "classId": "class-a",
+      "avatar": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
+      "initialTestTaken": true,
+      "overallMastery": 92,
+      "learningVelocity": "Fast",
+      "status": "Mastering",
+      "testsTaken": 4,
+      "conceptMastery": {
+        "c1": 98,
+        "c2": 95,
+        "c3": 92,
+        "c4": 90,
+        "c5": 88,
+        "c6": 91,
+        "c7": 86
+      },
+      "criticalGaps": [],
+      "rootPrerequisiteBottleneck": null,
+      "mentorNotes": []
+    },
+    {
+      "id": "s3",
+      "name": "Liam Patel",
+      "email": "liam.patel@cognilearn.edu",
+      "classId": "class-a",
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+      "initialTestTaken": true,
+      "overallMastery": 74,
+      "learningVelocity": "Steady",
+      "status": "On Track",
+      "testsTaken": 2,
+      "conceptMastery": {
+        "c1": 90,
+        "c2": 85,
+        "c3": 80,
+        "c4": 72,
+        "c5": 65,
+        "c6": 58,
+        "c7": 62
+      },
+      "criticalGaps": [
+        "c6"
+      ],
+      "rootPrerequisiteBottleneck": "c5",
+      "mentorNotes": []
+    },
+    {
+      "id": "s4",
+      "name": "Sophia Rodriguez",
+      "email": "sophia.r@cognilearn.edu",
+      "classId": "class-b",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
+      "initialTestTaken": true,
+      "overallMastery": 44,
+      "learningVelocity": "Needs Support",
+      "status": "Needs Intervention",
+      "testsTaken": 2,
+      "conceptMastery": {
+        "c1": 68,
+        "c2": 50,
+        "c3": 40,
+        "c4": 30,
+        "c5": 25,
+        "c6": 15,
+        "c7": 20
+      },
+      "criticalGaps": [
+        "c2",
+        "c3",
+        "c4"
+      ],
+      "rootPrerequisiteBottleneck": "c2",
+      "mentorNotes": []
+    },
+    {
+      "id": "s5",
+      "name": "Ethan Wright",
+      "email": "ethan.w@cognilearn.edu",
+      "classId": "class-a",
+      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
+      "initialTestTaken": true,
+      "overallMastery": 81,
+      "learningVelocity": "Fast",
+      "status": "On Track",
+      "testsTaken": 3,
+      "conceptMastery": {
+        "c1": 95,
+        "c2": 90,
+        "c3": 85,
+        "c4": 80,
+        "c5": 78,
+        "c6": 75,
+        "c7": 70
+      },
+      "criticalGaps": [],
+      "rootPrerequisiteBottleneck": null,
+      "mentorNotes": []
+    },
+    {
+      "id": "s6",
+      "name": "Jordan Taylor (New Student)",
+      "email": "jordan.t@cognilearn.edu",
+      "classId": "class-a",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+      "initialTestTaken": false,
+      "overallMastery": 0,
+      "learningVelocity": "Uncalibrated",
+      "status": "Diagnostic Pending",
+      "testsTaken": 0,
+      "conceptMastery": {
+        "c1": 0,
+        "c2": 0,
+        "c3": 0,
+        "c4": 0,
+        "c5": 0,
+        "c6": 0,
+        "c7": 0
+      },
+      "criticalGaps": [],
+      "rootPrerequisiteBottleneck": null,
+      "mentorNotes": []
+    }
+  ],
+  "mentors": [
+    {
+      "id": "m1",
+      "name": "Dr. Marcus Vance",
+      "email": "marcus.vance@cognilearn.edu",
+      "title": "Lead Academic Mentor & Math Specialist",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+      "assignedClasses": [
+        "class-a",
+        "class-b"
+      ],
+      "specialization": "Algebraic Structures & Adaptive Pedagogy"
+    },
+    {
+      "id": "m2",
+      "name": "Dr. Elena Rostova",
+      "email": "elena.rostova@cognilearn.edu",
+      "title": "Senior Academic Mentor",
+      "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80",
+      "assignedClasses": [
+        "class-c"
+      ],
+      "specialization": "Calculus & Non-Linear Functions"
+    }
+  ],
+  "admins": [
+    {
+      "id": "admin1",
+      "name": "Director Sarah Jenkins",
+      "email": "s.jenkins@cognilearn.edu",
+      "title": "Director of Academic Affairs & Analytics",
+      "avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
+      "department": "Institutional Learning & Assessment"
+    }
+  ],
+  "submissions": [
+    {
+      "id": "sub_s1_01",
+      "studentId": "s1",
+      "studentName": "Alex Rivera",
+      "testType": "Diagnostic Assessment",
+      "title": "Baseline Algebra Readiness Diagnostic",
+      "date": "2026-09-20 10:14 AM",
+      "score": 58,
+      "totalQuestions": 12,
+      "correctCount": 7,
+      "durationMinutes": 18,
+      "difficultyReached": "Medium",
+      "answers": [
+        {
+          "questionId": "q_c1_e1",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "easy",
+          "question": "What is the value of 14 - 3 × (2 + 1)?",
+          "options": [
+            "33",
+            "5",
+            "11",
+            "7"
+          ],
+          "studentAnswerIndex": 1,
+          "correctIndex": 1,
+          "isCorrect": true,
+          "timeSpentSeconds": 24,
+          "explanation": "Followed PEMDAS correctly: (2+1)=3, 3*3=9, 14-9=5."
+        },
+        {
+          "questionId": "q_c1_m1",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "medium",
+          "question": "Simplify the expression: -3(4x - 5) + 2(x + 7)",
+          "options": [
+            "-10x + 29",
+            "-10x - 1",
+            "-14x + 29",
+            "-10x + 1"
+          ],
+          "studentAnswerIndex": 0,
+          "correctIndex": 0,
+          "isCorrect": true,
+          "timeSpentSeconds": 52,
+          "explanation": "Correctly distributed negative signs."
+        },
+        {
+          "questionId": "q_c2_e1",
+          "conceptId": "c2",
+          "conceptName": "Linear Equations & Inequalities",
+          "difficulty": "easy",
+          "question": "Solve for x: 3x - 7 = 14",
+          "options": [
+            "x = 7",
+            "x = 21",
+            "x = 3",
+            "x = 2.33"
+          ],
+          "studentAnswerIndex": 0,
+          "correctIndex": 0,
+          "isCorrect": true,
+          "timeSpentSeconds": 31,
+          "explanation": "Isolated variable accurately."
+        },
+        {
+          "questionId": "q_c2_m1",
+          "conceptId": "c2",
+          "conceptName": "Linear Equations & Inequalities",
+          "difficulty": "medium",
+          "question": "Solve the inequality: 4 - 3x ≤ 19",
+          "options": [
+            "x ≥ -5",
+            "x ≤ -5",
+            "x ≥ 5",
+            "x ≤ 5"
+          ],
+          "studentAnswerIndex": 1,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 65,
+          "explanation": "Student forgot to flip the inequality sign when dividing by -3."
+        },
+        {
+          "questionId": "q_c3_e1",
+          "conceptId": "c3",
+          "conceptName": "Polynomial Operations",
+          "difficulty": "easy",
+          "question": "Combine like terms: (4x² - 3x + 8) + (2x² + 7x - 5)",
+          "options": [
+            "6x² + 4x + 3",
+            "6x² - 10x + 3",
+            "6x⁴ + 4x² + 3",
+            "2x² + 4x + 3"
+          ],
+          "studentAnswerIndex": 0,
+          "correctIndex": 0,
+          "isCorrect": true,
+          "timeSpentSeconds": 40,
+          "explanation": "Grouped coefficients correctly."
+        },
+        {
+          "questionId": "q_c3_m1",
+          "conceptId": "c3",
+          "conceptName": "Polynomial Operations",
+          "difficulty": "medium",
+          "question": "Expand and simplify: (2x - 3)(3x + 4)",
+          "options": [
+            "6x² - x - 12",
+            "6x² + x - 12",
+            "6x² - 12",
+            "6x² - 17x - 12"
+          ],
+          "studentAnswerIndex": 1,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 78,
+          "explanation": "Arithmetic sign error in FOIL inner terms (-9x + 8x = -x, student got +x)."
+        },
+        {
+          "questionId": "q_c4_e1",
+          "conceptId": "c4",
+          "conceptName": "Factoring Polynomials",
+          "difficulty": "easy",
+          "question": "Factor completely: 5x² - 20x",
+          "options": [
+            "5x(x - 4)",
+            "5(x² - 4x)",
+            "x(5x - 20)",
+            "(5x - 4)(x + 5)"
+          ],
+          "studentAnswerIndex": 1,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 88,
+          "explanation": "Student factored out constant 5 but failed to factor the common variable x (GCF error)."
+        },
+        {
+          "questionId": "q_c4_m1",
+          "conceptId": "c4",
+          "conceptName": "Factoring Polynomials",
+          "difficulty": "medium",
+          "question": "Factor the quadratic trinomial: x² - 7x + 12",
+          "options": [
+            "(x - 3)(x - 4)",
+            "(x + 3)(x + 4)",
+            "(x - 2)(x - 6)",
+            "(x + 2)(x - 6)"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 110,
+          "explanation": "Student picked factors of 12 (-2 and -6) that add to -8 instead of -7. Demonstrates misconception in trinomial decomposition."
+        },
+        {
+          "questionId": "q_c5_e1",
+          "conceptId": "c5",
+          "conceptName": "Quadratic Equations & Roots",
+          "difficulty": "easy",
+          "question": "Solve for x using factoring: x² - 9 = 0",
+          "options": [
+            "x = 3 and x = -3",
+            "x = 9 only",
+            "x = 3 only",
+            "x = 81 and x = -81"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 50,
+          "explanation": "Missed negative square root due to skipping difference of squares factoring."
+        },
+        {
+          "questionId": "q_c5_m1",
+          "conceptId": "c5",
+          "conceptName": "Quadratic Equations & Roots",
+          "difficulty": "medium",
+          "question": "What is the discriminant of 2x² - 4x + 2 = 0, and what does it tell you about the roots?",
+          "options": [
+            "D = 0; exactly one real root (repeated)",
+            "D = 32; two distinct real roots",
+            "D = -32; no real roots (two complex)",
+            "D = 16; two distinct rational roots"
+          ],
+          "studentAnswerIndex": 0,
+          "correctIndex": 0,
+          "isCorrect": true,
+          "timeSpentSeconds": 95,
+          "explanation": "Calculated D = 16 - 16 = 0 correctly."
+        },
+        {
+          "questionId": "q_c6_e1",
+          "conceptId": "c6",
+          "conceptName": "Parabolic Graphs & Vertex Forms",
+          "difficulty": "easy",
+          "question": "What are the coordinates of the vertex for y = (x - 4)² + 3?",
+          "options": [
+            "(4, 3)",
+            "(-4, 3)",
+            "(4, -3)",
+            "(-4, -3)"
+          ],
+          "studentAnswerIndex": 1,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 45,
+          "explanation": "Reversed sign of h in vertex form."
+        },
+        {
+          "questionId": "q_c7_e1",
+          "conceptId": "c7",
+          "conceptName": "Exponential Functions",
+          "difficulty": "easy",
+          "question": "If f(x) = 3 · 2^x, what is the value of f(4)?",
+          "options": [
+            "48",
+            "24",
+            "36",
+            "16"
+          ],
+          "studentAnswerIndex": 0,
+          "correctIndex": 0,
+          "isCorrect": true,
+          "timeSpentSeconds": 38,
+          "explanation": "Evaluated power of 2 correctly."
+        }
+      ]
+    },
+    {
+      "id": "sub_s1_02",
+      "studentId": "s1",
+      "studentName": "Alex Rivera",
+      "testType": "Adaptive Quiz",
+      "title": "Adaptive Quiz #1: Polynomials & Factoring Gaps",
+      "date": "2026-09-22 02:45 PM",
+      "score": 40,
+      "totalQuestions": 5,
+      "correctCount": 2,
+      "durationMinutes": 9,
+      "difficultyReached": "Easy",
+      "answers": [
+        {
+          "questionId": "q_c3_e1",
+          "conceptId": "c3",
+          "conceptName": "Polynomial Operations",
+          "difficulty": "easy",
+          "question": "Combine like terms: (4x² - 3x + 8) + (2x² + 7x - 5)",
+          "options": [
+            "6x² + 4x + 3",
+            "6x² - 10x + 3",
+            "6x⁴ + 4x² + 3",
+            "2x² + 4x + 3"
+          ],
+          "studentAnswerIndex": 0,
+          "correctIndex": 0,
+          "isCorrect": true,
+          "timeSpentSeconds": 33,
+          "explanation": "Answered correctly. Difficulty upgraded to Medium."
+        },
+        {
+          "questionId": "q_c3_m1",
+          "conceptId": "c3",
+          "conceptName": "Polynomial Operations",
+          "difficulty": "medium",
+          "question": "Expand and simplify: (2x - 3)(3x + 4)",
+          "options": [
+            "6x² - x - 12",
+            "6x² + x - 12",
+            "6x² - 12",
+            "6x² - 17x - 12"
+          ],
+          "studentAnswerIndex": 0,
+          "correctIndex": 0,
+          "isCorrect": true,
+          "timeSpentSeconds": 58,
+          "explanation": "Answered correctly. Engine branched to target gap: Factoring."
+        },
+        {
+          "questionId": "q_c4_m1",
+          "conceptId": "c4",
+          "conceptName": "Factoring Polynomials",
+          "difficulty": "medium",
+          "question": "Factor the quadratic trinomial: x² - 7x + 12",
+          "options": [
+            "(x - 3)(x - 4)",
+            "(x + 3)(x + 4)",
+            "(x - 2)(x - 6)",
+            "(x + 2)(x - 6)"
+          ],
+          "studentAnswerIndex": 3,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 120,
+          "explanation": "Engine lowered difficulty to Easy to test foundational GCF understanding."
+        },
+        {
+          "questionId": "q_c4_e1",
+          "conceptId": "c4",
+          "conceptName": "Factoring Polynomials",
+          "difficulty": "easy",
+          "question": "Factor completely: 5x² - 20x",
+          "options": [
+            "5x(x - 4)",
+            "5(x² - 4x)",
+            "x(5x - 20)",
+            "(5x - 4)(x + 5)"
+          ],
+          "studentAnswerIndex": 1,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 70,
+          "explanation": "Repeated GCF extraction mistake. Confirms persistent prerequisite gap in Factoring."
+        },
+        {
+          "questionId": "q_c5_e1",
+          "conceptId": "c5",
+          "conceptName": "Quadratic Equations & Roots",
+          "difficulty": "easy",
+          "question": "Solve for x using factoring: x² - 9 = 0",
+          "options": [
+            "x = 3 and x = -3",
+            "x = 9 only",
+            "x = 3 only",
+            "x = 81 and x = -81"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 62,
+          "explanation": "Failure directly tied to unresolved prerequisite in c4."
+        }
+      ]
+    },
+    {
+      "id": "sub_s1_03",
+      "studentId": "s1",
+      "studentName": "Alex Rivera",
+      "testType": "Adaptive Quiz",
+      "title": "Adaptive Quiz #2: Remedial Check on Factoring",
+      "date": "2026-09-24 11:30 AM",
+      "score": 60,
+      "totalQuestions": 5,
+      "correctCount": 3,
+      "durationMinutes": 8,
+      "difficultyReached": "Medium",
+      "answers": [
+        {
+          "questionId": "q_c1_m1",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "medium",
+          "question": "Simplify the expression: -3(4x - 5) + 2(x + 7)",
+          "options": [
+            "-10x + 29",
+            "-10x - 1",
+            "-14x + 29",
+            "-10x + 1"
+          ],
+          "studentAnswerIndex": 0,
+          "correctIndex": 0,
+          "isCorrect": true,
+          "timeSpentSeconds": 41,
+          "explanation": "Strong foundational accuracy."
+        },
+        {
+          "questionId": "q_c4_e1",
+          "conceptId": "c4",
+          "conceptName": "Factoring Polynomials",
+          "difficulty": "easy",
+          "question": "Factor completely: 5x² - 20x",
+          "options": [
+            "5x(x - 4)",
+            "5(x² - 4x)",
+            "x(5x - 20)",
+            "(5x - 4)(x + 5)"
+          ],
+          "studentAnswerIndex": 0,
+          "correctIndex": 0,
+          "isCorrect": true,
+          "timeSpentSeconds": 65,
+          "explanation": "Correct! Alex successfully factored out 5x this time after reviewing the module."
+        },
+        {
+          "questionId": "q_c4_m1",
+          "conceptId": "c4",
+          "conceptName": "Factoring Polynomials",
+          "difficulty": "medium",
+          "question": "Factor the quadratic trinomial: x² - 7x + 12",
+          "options": [
+            "(x - 3)(x - 4)",
+            "(x + 3)(x + 4)",
+            "(x - 2)(x - 6)",
+            "(x + 2)(x - 6)"
+          ],
+          "studentAnswerIndex": 0,
+          "correctIndex": 0,
+          "isCorrect": true,
+          "timeSpentSeconds": 85,
+          "explanation": "Correct! Trinomial factoring solved accurately."
+        },
+        {
+          "questionId": "q_c4_h1",
+          "conceptId": "c4",
+          "conceptName": "Factoring Polynomials",
+          "difficulty": "hard",
+          "question": "Factor completely: 6x² + 11x - 10",
+          "options": [
+            "(2x + 5)(3x - 2)",
+            "(3x + 5)(2x - 2)",
+            "(6x - 5)(x + 2)",
+            "(2x - 5)(3x + 2)"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 140,
+          "explanation": "AC method decomposition with leading coefficient > 1 still needs practice."
+        },
+        {
+          "questionId": "q_c5_e1",
+          "conceptId": "c5",
+          "conceptName": "Quadratic Equations & Roots",
+          "difficulty": "easy",
+          "question": "Solve for x using factoring: x² - 9 = 0",
+          "options": [
+            "x = 3 and x = -3",
+            "x = 9 only",
+            "x = 3 only",
+            "x = 81 and x = -81"
+          ],
+          "studentAnswerIndex": 1,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 55,
+          "explanation": "Still forgetting negative root when solving difference of squares."
+        }
+      ]
+    },
+    {
+      "id": "sub_s2_01",
+      "studentId": "s2",
+      "studentName": "Maya Chen",
+      "testType": "Diagnostic Assessment",
+      "title": "Baseline Algebra Readiness Diagnostic",
+      "date": "2026-09-18 09:00 AM",
+      "score": 92,
+      "totalQuestions": 12,
+      "correctCount": 11,
+      "durationMinutes": 14,
+      "difficultyReached": "Hard",
+      "answers": []
+    }
+  ]
+}
