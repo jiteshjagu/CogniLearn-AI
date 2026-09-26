@@ -21,7 +21,26 @@ export const Navbar = ({
 }) => {
   const [showRoleMenu, setShowRoleMenu] = useState(false);
 
-  const students = StorageService.getStudents();
+  const rawStudents = StorageService.getStudents();
+  // Deduplicate strictly by name, email, and ID so no duplicate names ever appear
+  const uniqueStudents = [];
+  const seenStudentKeys = new Set();
+  for (const st of rawStudents) {
+    if (!st) continue;
+    const nameKey = st.name?.trim().toLowerCase();
+    const emailKey = st.email?.trim().toLowerCase();
+    const idKey = st.id;
+    if ((nameKey && seenStudentKeys.has(nameKey)) || 
+        (emailKey && seenStudentKeys.has(emailKey)) || 
+        (idKey && seenStudentKeys.has(idKey))) {
+      continue;
+    }
+    if (nameKey) seenStudentKeys.add(nameKey);
+    if (emailKey) seenStudentKeys.add(emailKey);
+    if (idKey) seenStudentKeys.add(idKey);
+    uniqueStudents.push(st);
+  }
+
   const mentors = StorageService.getMentors();
   const admins = StorageService.getAdmins();
 
@@ -99,7 +118,7 @@ export const Navbar = ({
                     <div className="px-3 py-1 text-[11px] font-semibold text-blue-600 flex items-center gap-1">
                       <GraduationCap className="w-3.5 h-3.5" /> Students
                     </div>
-                    {students.slice(0, 4).map(st => (
+                    {uniqueStudents.slice(0, 5).map(st => (
                       <button
                         key={st.id}
                         onClick={() => {

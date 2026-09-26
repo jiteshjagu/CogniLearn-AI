@@ -75,18 +75,13 @@ export const ApiClient = {
 
   addStudent: async (studentData) => {
     try {
-      const res = await fetch(`${API_BASE}/students`, {
+      await fetch(`${API_BASE}/students`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(studentData)
       });
-      if (res.ok) {
-        const saved = await res.json();
-        StorageService.addStudent(saved);
-        return saved;
-      }
     } catch {}
-    return StorageService.addStudent(studentData);
+    return studentData;
   },
 
   addMentorNote: async (studentId, note, author) => {

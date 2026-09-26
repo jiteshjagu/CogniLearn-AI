@@ -53,13 +53,32 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
   const mentorClasses = classes.filter(c => assignedClassIds.includes(c.id));
 
   // Filter students based on mentor's classes
-  const mentorStudents = students.filter(s => {
+  const rawMentorStudents = students.filter(s => {
     const isInMentorClass = assignedClassIds.includes(s.classId);
     if (!isInMentorClass) return false;
     if (selectedClassFilter !== 'all' && s.classId !== selectedClassFilter) return false;
     if (searchQuery && !s.name.toLowerCase().includes(searchQuery.toLowerCase()) && !s.email.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     return true;
   });
+
+  // Deduplicate mentorStudents strictly by name, email, and ID so no duplicate names ever appear
+  const mentorStudents = [];
+  const seenMentorStudentKeys = new Set();
+  for (const s of rawMentorStudents) {
+    if (!s) continue;
+    const nameKey = s.name?.trim().toLowerCase();
+    const emailKey = s.email?.trim().toLowerCase();
+    const idKey = s.id;
+    if ((nameKey && seenMentorStudentKeys.has(nameKey)) || 
+        (emailKey && seenMentorStudentKeys.has(emailKey)) || 
+        (idKey && seenMentorStudentKeys.has(idKey))) {
+      continue;
+    }
+    if (nameKey) seenMentorStudentKeys.add(nameKey);
+    if (emailKey) seenMentorStudentKeys.add(emailKey);
+    if (idKey) seenMentorStudentKeys.add(idKey);
+    mentorStudents.push(s);
+  }
 
   const selectedStudent = students.find(s => s.id === selectedStudentId);
   const studentSubmissions = selectedStudent ? StorageService.getSubmissionsByStudent(selectedStudent.id) : [];
@@ -108,18 +127,20 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
       return;
     }
 
-    // Check if email already registered
+    // Check if email or name already registered
+    const normEmail = newEmail.trim().toLowerCase();
+    const normName = newName.trim().toLowerCase();
     const existing = StorageService.getStudents().find(
-      s => s.email.toLowerCase() === newEmail.trim().toLowerCase()
+      s => s.email?.toLowerCase().trim() === normEmail || s.name?.toLowerCase().trim() === normName
     );
     if (existing) {
-      setModalError('A student with this email address already exists.');
+      setModalError(`A student named "${existing.name}" or with this email already exists.`);
       return;
     }
 
     const created = StorageService.addStudent({
       name: newName.trim(),
-      email: newEmail.trim().toLowerCase(),
+      email: normEmail,
       classId: newClassId
     });
 

@@ -94,10 +94,27 @@ class Database {
   }
 
   addStudent(studentData) {
+    const normEmail = studentData.email?.trim().toLowerCase();
+    const normName = studentData.name?.trim().toLowerCase();
+
+    // Check if student with this email or name already exists in server db
+    const existing = this.data.students.find(s => 
+      (normEmail && s.email?.toLowerCase().trim() === normEmail) ||
+      (normName && s.name?.toLowerCase().trim() === normName) ||
+      (studentData.id && s.id === studentData.id)
+    );
+
+    if (existing) {
+      if (studentData.name) existing.name = studentData.name.trim();
+      if (normEmail) existing.email = normEmail;
+      this.save();
+      return existing;
+    }
+
     const newStudent = {
       id: studentData.id || `s_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
       name: studentData.name?.trim() || 'New Student',
-      email: studentData.email?.trim().toLowerCase(),
+      email: normEmail || `student_${Date.now()}@cognilearn.edu`,
       classId: studentData.classId || 'class-a',
       avatar: studentData.avatar || `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80`,
       initialTestTaken: false,

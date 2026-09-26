@@ -33,7 +33,18 @@ export const AdminDashboard = ({ currentUser, onBackToLogin, onNavigateStudent }
 
   // Helper calculations
   const getClassStudents = (classId) => {
-    return students.filter(s => s.classId === classId);
+    const list = students.filter(s => s.classId === classId);
+    const seen = new Set();
+    const unique = [];
+    for (const s of list) {
+      if (!s) continue;
+      const key = (s.name?.trim().toLowerCase() || s.id);
+      if (!seen.has(key)) {
+        seen.add(key);
+        unique.push(s);
+      }
+    }
+    return unique;
   };
 
   const calculateClassMetrics = (classId) => {

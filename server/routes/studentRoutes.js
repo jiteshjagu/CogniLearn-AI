@@ -27,10 +27,15 @@ studentRouter.post('/', (req, res) => {
     return res.status(400).json({ error: 'Name and email are required' });
   }
 
-  // Check if student with email already exists
-  const existing = db.getStudents().find(s => s.email.toLowerCase() === email.trim().toLowerCase());
+  // Check if student with email or name already exists
+  const normEmail = email.trim().toLowerCase();
+  const normName = name.trim().toLowerCase();
+  const existing = db.getStudents().find(s => 
+    s.email?.toLowerCase().trim() === normEmail ||
+    s.name?.toLowerCase().trim() === normName
+  );
   if (existing) {
-    return res.status(409).json({ error: 'A student with this email already exists', student: existing });
+    return res.status(200).json(existing);
   }
 
   const newStudent = db.addStudent({ name, email, classId });

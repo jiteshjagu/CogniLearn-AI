@@ -41,7 +41,39 @@ export const StorageService = {
   getStudents: () => {
     try {
       const data = localStorage.getItem(STORAGE_KEYS.STUDENTS);
-      return data ? JSON.parse(data) : INITIAL_STUDENTS;
+      const rawList = data ? JSON.parse(data) : INITIAL_STUDENTS;
+      
+      // Deduplicate strictly by id, normalized email, and normalized name
+      const seenIds = new Set();
+      const seenEmails = new Set();
+      const seenNames = new Set();
+      const uniqueList = [];
+
+      for (const s of rawList) {
+        if (!s) continue;
+        const idKey = s.id ? String(s.id).trim() : null;
+        const emailKey = s.email ? s.email.toLowerCase().trim() : null;
+        const nameKey = s.name ? s.name.toLowerCase().trim() : null;
+
+        // If this student matches an already seen ID, email, or exact name, skip as duplicate
+        if ((idKey && seenIds.has(idKey)) || 
+            (emailKey && seenEmails.has(emailKey)) || 
+            (nameKey && seenNames.has(nameKey))) {
+          continue;
+        }
+
+        if (idKey) seenIds.add(idKey);
+        if (emailKey) seenEmails.add(emailKey);
+        if (nameKey) seenNames.add(nameKey);
+        uniqueList.push(s);
+      }
+
+      // If duplicates were found and stripped, update localStorage to clean it up permanently
+      if (uniqueList.length !== rawList.length) {
+        localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(uniqueList));
+      }
+
+      return uniqueList;
     } catch {
       return INITIAL_STUDENTS;
     }
@@ -65,10 +97,30 @@ export const StorageService = {
 
   addStudent: (studentData) => {
     const students = StorageService.getStudents();
+    const normalizedEmail = studentData.email?.trim().toLowerCase();
+    const normalizedName = studentData.name?.trim().toLowerCase();
+
+    // Check if a student with this email OR this name already exists - update instead of creating duplicate!
+    const existingIdx = students.findIndex(s => 
+      (normalizedEmail && s.email?.toLowerCase().trim() === normalizedEmail) ||
+      (normalizedName && s.name?.toLowerCase().trim() === normalizedName)
+    );
+
+    if (existingIdx !== -1) {
+      students[existingIdx] = {
+        ...students[existingIdx],
+        ...studentData,
+        name: studentData.name?.trim() || students[existingIdx].name,
+        email: normalizedEmail || students[existingIdx].email
+      };
+      localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(students));
+      return students[existingIdx];
+    }
+
     const newStudent = {
       id: studentData.id || `s_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
       name: studentData.name?.trim() || 'New Student',
-      email: studentData.email?.trim().toLowerCase(),
+      email: normalizedEmail || `student_${Date.now()}@cognilearn.edu`,
       classId: studentData.classId || 'class-a',
       avatar: studentData.avatar || `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80`,
       initialTestTaken: false,
@@ -83,6 +135,7 @@ export const StorageService = {
       rootPrerequisiteBottleneck: null,
       mentorNotes: []
     };
+
     students.unshift(newStudent);
     localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(students));
     return newStudent;

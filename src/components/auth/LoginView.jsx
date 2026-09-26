@@ -70,7 +70,11 @@ export const LoginView = ({ onLoginSuccess }) => {
 
     if (selectedRole === 'student') {
       const allStudents = StorageService.getStudents();
-      let student = allStudents.find(s => s.email.toLowerCase() === inputEmail);
+      const normInputName = studentName.trim().toLowerCase();
+      let student = allStudents.find(s => 
+        s.email?.toLowerCase().trim() === inputEmail ||
+        (normInputName && s.name?.toLowerCase().trim() === normInputName)
+      );
 
       if (student) {
         // If student exists and user typed a custom name, update the name
