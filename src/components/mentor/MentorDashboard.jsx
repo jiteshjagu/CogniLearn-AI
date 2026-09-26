@@ -304,14 +304,12 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
                           onClick={() => handleOpenStudentReport(student)}
                           className="hover:bg-emerald-50/50 cursor-pointer transition-colors group"
                         >
-                          {/* Student Name & Avatar */}
+                          {/* Student Name & Typography Identity */}
                           <td className="py-3.5 px-4">
                             <div className="flex items-center gap-3">
-                              <img
-                                src={student.avatar}
-                                alt={student.name}
-                                className="w-10 h-10 rounded-full object-cover border border-slate-200 group-hover:border-emerald-400 shrink-0"
-                              />
+                              <span className="font-mono text-xs font-black uppercase text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 shrink-0">
+                                #STU-{student.id ? String(student.id).replace(/^s/i, '').padStart(4, '0') : '—'}
+                              </span>
                               <div>
                                 <div className="font-extrabold text-slate-900 group-hover:text-emerald-700 text-sm transition-colors">
                                   {student.name}
@@ -449,20 +447,21 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
               {/* Student Summary Top Card */}
               <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <img
-                      src={selectedStudent.avatar}
-                      alt={selectedStudent.name}
-                      className="w-16 h-16 rounded-2xl object-cover border-2 border-emerald-300 shadow-xs"
-                    />
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h2 className="text-xl font-bold text-slate-900">{selectedStudent.name}</h2>
-                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                          selectedStudent.status === 'Needs Intervention'
-                            ? 'bg-red-100 text-red-800'
-                            : 'bg-emerald-100 text-emerald-800'
-                        }`}>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xs font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+                        User ID: #STU-{selectedStudent.id ? String(selectedStudent.id).replace(/^s/i, '').padStart(4, '0') : '—'}
+                      </span>
+                      <span className="text-xs text-slate-400">•</span>
+                      <span className="text-xs text-slate-500 font-mono">{selectedStudent.email}</span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-1">
+                      <h2 className="text-xl font-bold text-slate-900">{selectedStudent.name}</h2>
+                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                        selectedStudent.status === 'Needs Intervention'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-emerald-100 text-emerald-800'
+                      }`}>
                           {selectedStudent.status}
                         </span>
                       </div>
@@ -479,7 +478,6 @@ export const MentorDashboard = ({ currentUser, onBackToLogin, onNavigateStudent 
                         </span>
                       </div>
                     </div>
-                  </div>
 
                   <div className="text-right flex items-center gap-4">
                     <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-center min-w-28">

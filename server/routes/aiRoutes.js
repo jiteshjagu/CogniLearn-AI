@@ -35,15 +35,23 @@ aiRouter.post('/explain-mistake', async (req, res) => {
 
 // POST: AI Study Companion Chat Dialog
 aiRouter.post('/chat', async (req, res) => {
-  const { message, context, apiKey } = req.body;
-  if (!message) {
-    return res.status(400).json({ error: 'message is required' });
+  const { message, subjectId, context, apiKey } = req.body;
+  if (!message || !message.trim()) {
+    return res.status(400).json({ error: 'Message cannot be empty or whitespace only.' });
   }
 
   try {
-    const reply = await AiServiceBackend.chat(message, context || {}, apiKey);
-    res.json({ reply });
+    const result = await AiServiceBackend.chat(message.trim(), { ...context, subjectId }, apiKey);
+    res.json(result);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    if (err.status === 429 || err.message?.includes('429')) {
+      return res.status(429).json({ 
+        error: 'Rate limit exceeded', 
+        retryAfter: err.retryAfter || 30,
+        message: 'The AI Tutor has reached its current API rate limit. Please retry in a few seconds.' 
+      });
+    }
+    console.error('Chat endpoint error:', err);
+    res.status(500).json({ error: err.message || 'Internal server error while processing AI tutor response.' });
   }
 });

@@ -485,11 +485,9 @@ export const AdminDashboard = ({ currentUser, onBackToLogin, onNavigateStudent }
                         <tr key={student.id} className="hover:bg-slate-50/80 transition-colors">
                           <td className="py-3.5 px-4">
                             <div className="flex items-center gap-3">
-                              <img
-                                src={student.avatar}
-                                alt={student.name}
-                                className="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0"
-                              />
+                              <span className="font-mono text-xs font-black uppercase text-purple-700 bg-purple-50 px-2 py-1 rounded-md border border-purple-200 shrink-0">
+                                #STU-{student.id ? String(student.id).replace(/^s/i, '').padStart(4, '0') : '—'}
+                              </span>
                               <div>
                                 <div className="font-bold text-slate-900">{student.name}</div>
                                 <div className="text-[11px] text-slate-400">{student.email}</div>

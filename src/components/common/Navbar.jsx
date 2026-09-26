@@ -87,7 +87,7 @@ export const Navbar = ({
         </div>
 
         {/* Right Action Controls */}
-        {currentUser && (
+        {currentUser ? (
           <div className="flex items-center gap-2 sm:gap-3">
             
             {/* Quick Persona Switcher Menu */}
@@ -99,8 +99,10 @@ export const Navbar = ({
               >
                 <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs font-semibold border ${roleInfo.bg}`}>
                   <RoleIcon className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">{roleInfo.label}:</span>
-                  <span className="font-bold text-slate-800">{currentUser.name?.split(' ')[0]}</span>
+                  <span className="font-mono text-[11px] font-bold">
+                    {currentUser.id ? `#${currentUser.id.startsWith('s') ? `STU-${currentUser.id.replace(/^s/i, '').padStart(4, '0')}` : currentUser.id.toUpperCase()}` : '—'}
+                  </span>
+                  <span className="hidden sm:inline font-bold text-slate-800">• {currentUser.name?.split(' ')[0]}</span>
                 </span>
                 <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
               </button>
@@ -217,6 +219,12 @@ export const Navbar = ({
               <span className="hidden sm:inline">Back to Login</span>
             </button>
 
+          </div>
+        ) : (
+          <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
+            <span className="animate-pulse bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
+              User ID: —
+            </span>
           </div>
         )}
 

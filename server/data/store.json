@@ -3,7 +3,7 @@
     {
       "id": "class-a",
       "name": "Class 10-A",
-      "subject": "Algorithmic Foundations & Algebra",
+      "subject": "Mathematics",
       "mentorId": "m1",
       "mentorName": "Dr. Marcus Vance",
       "room": "Hall 302",
@@ -20,7 +20,7 @@
     {
       "id": "class-b",
       "name": "Class 10-B",
-      "subject": "Applied Mathematics & Modeling",
+      "subject": "Mathematics",
       "mentorId": "m1",
       "mentorName": "Dr. Marcus Vance",
       "room": "Hall 104",
@@ -35,17 +35,89 @@
     {
       "id": "class-c",
       "name": "Class 11-A",
-      "subject": "Advanced Functions & Pre-Calculus",
+      "subject": "Science",
       "mentorId": "m2",
       "mentorName": "Dr. Elena Rostova",
       "room": "Hall 405",
       "schedule": "Mon / Wed 02:00 PM",
       "studentIds": [],
-      "targetCurriculum": "Pre-Calculus & Polynomial Analysis",
+      "targetCurriculum": "Physics & Thermodynamics",
       "academicTerm": "Fall 2026"
     }
   ],
   "students": [
+    {
+      "id": "s_1790415516492_17o1",
+      "name": "ammaaa aseree",
+      "email": "rtyulaw@gmail.com",
+      "classId": "class-a",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+      "initialTestTaken": false,
+      "overallMastery": 0,
+      "learningVelocity": "Uncalibrated",
+      "status": "Diagnostic Pending",
+      "testsTaken": 0,
+      "conceptMastery": {
+        "c1": 0,
+        "c2": 0,
+        "c3": 0,
+        "c4": 0,
+        "c5": 0,
+        "c6": 0,
+        "c7": 0
+      },
+      "criticalGaps": [],
+      "rootPrerequisiteBottleneck": null,
+      "mentorNotes": []
+    },
+    {
+      "id": "s_1790414434982_j4b0",
+      "name": "Rehan Mujavar",
+      "email": "rehan@gmail.com",
+      "classId": "class-a",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+      "initialTestTaken": false,
+      "overallMastery": 0,
+      "learningVelocity": "Uncalibrated",
+      "status": "Diagnostic Pending",
+      "testsTaken": 0,
+      "conceptMastery": {
+        "c1": 0,
+        "c2": 0,
+        "c3": 0,
+        "c4": 0,
+        "c5": 0,
+        "c6": 0,
+        "c7": 0
+      },
+      "criticalGaps": [],
+      "rootPrerequisiteBottleneck": null,
+      "mentorNotes": []
+    },
+    {
+      "id": "s_1790413820169_e6jr",
+      "name": "ishant",
+      "email": "ishantj309@gmail.com",
+      "classId": "class-c",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+      "initialTestTaken": false,
+      "overallMastery": 0,
+      "learningVelocity": "Uncalibrated",
+      "status": "Diagnostic Pending",
+      "testsTaken": 0,
+      "conceptMastery": {
+        "c1": 0,
+        "c2": 0,
+        "c3": 0,
+        "c4": 0,
+        "c5": 0,
+        "c6": 0,
+        "c7": 0
+      },
+      "criticalGaps": [],
+      "rootPrerequisiteBottleneck": null,
+      "mentorNotes": []
+    },
     {
       "id": "s1",
       "name": "Alex Rivera",
@@ -53,27 +125,29 @@
       "classId": "class-b",
       "avatar": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80",
       "initialTestTaken": true,
-      "overallMastery": 48,
+      "overallMastery": 2,
       "learningVelocity": "Needs Support",
       "status": "Needs Intervention",
-      "testsTaken": 4,
+      "testsTaken": 8,
       "conceptMastery": {
-        "c1": 94,
-        "c2": 31,
-        "c3": 84,
-        "c4": 28,
-        "c5": 32,
-        "c6": 20,
-        "c7": 45
+        "c1": 17,
+        "c2": 0,
+        "c3": 0,
+        "c4": 0,
+        "c5": 0,
+        "c6": 0,
+        "c7": 0
       },
       "criticalGaps": [
+        "c1",
         "c2",
+        "c3",
         "c4",
         "c5",
         "c6",
         "c7"
       ],
-      "rootPrerequisiteBottleneck": "c4",
+      "rootPrerequisiteBottleneck": "c1",
       "mentorNotes": [
         {
           "date": "2026-09-22",
@@ -246,6 +320,1122 @@
     }
   ],
   "submissions": [
+    {
+      "id": "sub_1790413748083_c9l",
+      "studentId": "s1",
+      "studentName": "Alex Rivera",
+      "testType": "Adaptive Quiz",
+      "title": "Adaptive Quiz: Arithmetic & Number Properties",
+      "date": "9/26/2026 02:39 PM",
+      "score": 14,
+      "rawAccuracy": 20,
+      "totalQuestions": 5,
+      "correctCount": 1,
+      "durationMinutes": 1,
+      "difficultyReached": "MEDIUM",
+      "answers": [
+        {
+          "questionId": "dyn_proc_c1_medium_1790413704616_z2ke",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "medium",
+          "question": "Simplify the integer expression with signed values: (-11) × (7) - (-7)",
+          "options": [
+            "84",
+            "-84",
+            "539",
+            "-70"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 3,
+          "isCorrect": false,
+          "timeSpentSeconds": 3,
+          "explanation": "First, multiply (-11) × (7) = -77. Next, subtract negative -7: -77 - (-7) = -77 + 7 = -70."
+        },
+        {
+          "questionId": "dyn_proc_c1_easy_1790413709553_a2dd",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "easy",
+          "question": "Evaluate using the proper order of operations (PEMDAS): 25 - 18 × 8",
+          "options": [
+            "169",
+            "56",
+            "-119",
+            "-1"
+          ],
+          "studentAnswerIndex": 1,
+          "correctIndex": 2,
+          "isCorrect": false,
+          "timeSpentSeconds": 2,
+          "explanation": "Multiplication takes precedence over subtraction: 18 × 8 = 144. Then, 25 - 144 = -119."
+        },
+        {
+          "questionId": "dyn_proc_c1_easy_1790413713116_v1um",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "easy",
+          "question": "Evaluate using the proper order of operations (PEMDAS): 23 - 10 × 4",
+          "options": [
+            "9",
+            "63",
+            "-17",
+            "52"
+          ],
+          "studentAnswerIndex": 1,
+          "correctIndex": 2,
+          "isCorrect": false,
+          "timeSpentSeconds": 2,
+          "explanation": "Multiplication takes precedence over subtraction: 10 × 4 = 40. Then, 23 - 40 = -17."
+        },
+        {
+          "questionId": "dyn_proc_c1_easy_1790413716781_6b40",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "easy",
+          "question": "Evaluate using the proper order of operations (PEMDAS): 20 - 20 × 3",
+          "options": [
+            "0",
+            "-40",
+            "-3",
+            "80"
+          ],
+          "studentAnswerIndex": 1,
+          "correctIndex": 1,
+          "isCorrect": true,
+          "timeSpentSeconds": 2,
+          "explanation": "Multiplication takes precedence over subtraction: 20 × 3 = 60. Then, 20 - 60 = -40."
+        },
+        {
+          "questionId": "dyn_proc_c1_medium_1790413720228_dgn6",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "medium",
+          "question": "Simplify the integer expression with signed values: (-6) × (3) - (-6)",
+          "options": [
+            "-12",
+            "108",
+            "24",
+            "-24"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 2,
+          "explanation": "First, multiply (-6) × (3) = -18. Next, subtract negative -6: -18 - (-6) = -18 + 6 = -12."
+        }
+      ],
+      "evaluation": {
+        "score": 14,
+        "rawAccuracy": 20,
+        "grade": "Requires Targeted Intervention",
+        "previousOverallMastery": 2,
+        "newOverallMastery": 2,
+        "overallDelta": "+0%",
+        "numericDelta": 0,
+        "avgTimePerQuestion": 2,
+        "learningVelocity": "Needs Support",
+        "conceptDeltas": [
+          {
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "previousMastery": 12,
+            "newMastery": 17,
+            "delta": "+5%",
+            "numericDelta": 5,
+            "testAccuracy": 20,
+            "questionsCount": 5,
+            "status": "Improving 📈"
+          }
+        ],
+        "cognitiveDiagnoses": [
+          {
+            "questionId": "dyn_proc_c1_medium_1790413704616_z2ke",
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "question": "Simplify the integer expression with signed values: (-11) × (7) - (-7)",
+            "selectedOption": "539",
+            "correctOption": "-70",
+            "trapTitle": "Precedence Hierarchy Slip",
+            "trapExplanation": "First, multiply (-11) × (7) = -77. Next, subtract negative -7: -77 - (-7) = -77 + 7 = -70.",
+            "remedy": "Execute all multiplication and division before performing any addition or subtraction."
+          },
+          {
+            "questionId": "dyn_proc_c1_easy_1790413709553_a2dd",
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "question": "Evaluate using the proper order of operations (PEMDAS): 25 - 18 × 8",
+            "selectedOption": "56",
+            "correctOption": "-119",
+            "trapTitle": "Precedence Hierarchy Slip",
+            "trapExplanation": "Multiplication takes precedence over subtraction: 18 × 8 = 144. Then, 25 - 144 = -119.",
+            "remedy": "Execute all multiplication and division before performing any addition or subtraction."
+          },
+          {
+            "questionId": "dyn_proc_c1_easy_1790413713116_v1um",
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "question": "Evaluate using the proper order of operations (PEMDAS): 23 - 10 × 4",
+            "selectedOption": "63",
+            "correctOption": "-17",
+            "trapTitle": "Precedence Hierarchy Slip",
+            "trapExplanation": "Multiplication takes precedence over subtraction: 10 × 4 = 40. Then, 23 - 40 = -17.",
+            "remedy": "Execute all multiplication and division before performing any addition or subtraction."
+          },
+          {
+            "questionId": "dyn_proc_c1_medium_1790413720228_dgn6",
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "question": "Simplify the integer expression with signed values: (-6) × (3) - (-6)",
+            "selectedOption": "24",
+            "correctOption": "-12",
+            "trapTitle": "Precedence Hierarchy Slip",
+            "trapExplanation": "First, multiply (-6) × (3) = -18. Next, subtract negative -6: -18 - (-6) = -18 + 6 = -12.",
+            "remedy": "Execute all multiplication and division before performing any addition or subtraction."
+          }
+        ],
+        "resolvedGaps": [],
+        "persistentGaps": [
+          "Arithmetic & Number Properties",
+          "Linear Equations & Inequalities",
+          "Polynomial Operations",
+          "Factoring Polynomials",
+          "Quadratic Equations & Roots",
+          "Parabolic Graphs & Vertex Forms",
+          "Exponential Functions"
+        ],
+        "newlyIdentifiedGaps": [],
+        "rootPrerequisiteBottleneck": "c1",
+        "rootBottleneckName": "Arithmetic & Number Properties",
+        "prescription": {
+          "summary": "Impressive progress! Student gained +0% overall mastery during this assessment.",
+          "strengths": [
+            "Arithmetic Fundamentals"
+          ],
+          "focusAreas": [
+            "Arithmetic & Number Properties",
+            "Linear Equations & Inequalities",
+            "Polynomial Operations",
+            "Factoring Polynomials",
+            "Quadratic Equations & Roots",
+            "Parabolic Graphs & Vertex Forms",
+            "Exponential Functions"
+          ],
+          "recommendedAction": "Focus next sprint on Arithmetic & Number Properties to resolve the critical bottleneck unlocking higher-level units.",
+          "mentorInsight": "Student is calibrating baseline performance. Recommended to assign targeted remedial practice for Arithmetic & Number Properties, Linear Equations & Inequalities, Polynomial Operations, Factoring Polynomials, Quadratic Equations & Roots, Parabolic Graphs & Vertex Forms, Exponential Functions."
+        }
+      }
+    },
+    {
+      "id": "sub_1790413723366_gwx",
+      "studentId": "s1",
+      "studentName": "Alex Rivera",
+      "testType": "Adaptive Quiz",
+      "title": "Adaptive Quiz: Arithmetic & Number Properties",
+      "date": "9/26/2026 02:38 PM",
+      "score": 14,
+      "rawAccuracy": 20,
+      "totalQuestions": 5,
+      "correctCount": 1,
+      "durationMinutes": 1,
+      "difficultyReached": "MEDIUM",
+      "answers": [
+        {
+          "questionId": "dyn_proc_c1_medium_1790413704616_z2ke",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "medium",
+          "question": "Simplify the integer expression with signed values: (-11) × (7) - (-7)",
+          "options": [
+            "84",
+            "-84",
+            "539",
+            "-70"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 3,
+          "isCorrect": false,
+          "timeSpentSeconds": 3,
+          "explanation": "First, multiply (-11) × (7) = -77. Next, subtract negative -7: -77 - (-7) = -77 + 7 = -70."
+        },
+        {
+          "questionId": "dyn_proc_c1_easy_1790413709553_a2dd",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "easy",
+          "question": "Evaluate using the proper order of operations (PEMDAS): 25 - 18 × 8",
+          "options": [
+            "169",
+            "56",
+            "-119",
+            "-1"
+          ],
+          "studentAnswerIndex": 1,
+          "correctIndex": 2,
+          "isCorrect": false,
+          "timeSpentSeconds": 2,
+          "explanation": "Multiplication takes precedence over subtraction: 18 × 8 = 144. Then, 25 - 144 = -119."
+        },
+        {
+          "questionId": "dyn_proc_c1_easy_1790413713116_v1um",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "easy",
+          "question": "Evaluate using the proper order of operations (PEMDAS): 23 - 10 × 4",
+          "options": [
+            "9",
+            "63",
+            "-17",
+            "52"
+          ],
+          "studentAnswerIndex": 1,
+          "correctIndex": 2,
+          "isCorrect": false,
+          "timeSpentSeconds": 2,
+          "explanation": "Multiplication takes precedence over subtraction: 10 × 4 = 40. Then, 23 - 40 = -17."
+        },
+        {
+          "questionId": "dyn_proc_c1_easy_1790413716781_6b40",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "easy",
+          "question": "Evaluate using the proper order of operations (PEMDAS): 20 - 20 × 3",
+          "options": [
+            "0",
+            "-40",
+            "-3",
+            "80"
+          ],
+          "studentAnswerIndex": 1,
+          "correctIndex": 1,
+          "isCorrect": true,
+          "timeSpentSeconds": 2,
+          "explanation": "Multiplication takes precedence over subtraction: 20 × 3 = 60. Then, 20 - 60 = -40."
+        },
+        {
+          "questionId": "dyn_proc_c1_medium_1790413720228_dgn6",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "medium",
+          "question": "Simplify the integer expression with signed values: (-6) × (3) - (-6)",
+          "options": [
+            "-12",
+            "108",
+            "24",
+            "-24"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 2,
+          "explanation": "First, multiply (-6) × (3) = -18. Next, subtract negative -6: -18 - (-6) = -18 + 6 = -12."
+        }
+      ],
+      "evaluation": {
+        "score": 14,
+        "rawAccuracy": 20,
+        "grade": "Requires Targeted Intervention",
+        "previousOverallMastery": 0,
+        "newOverallMastery": 2,
+        "overallDelta": "+2%",
+        "numericDelta": 2,
+        "avgTimePerQuestion": 2,
+        "learningVelocity": "Needs Support",
+        "conceptDeltas": [
+          {
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "previousMastery": 0,
+            "newMastery": 12,
+            "delta": "+12%",
+            "numericDelta": 12,
+            "testAccuracy": 20,
+            "questionsCount": 5,
+            "status": "Rapid Progress 🚀"
+          }
+        ],
+        "cognitiveDiagnoses": [
+          {
+            "questionId": "dyn_proc_c1_medium_1790413704616_z2ke",
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "question": "Simplify the integer expression with signed values: (-11) × (7) - (-7)",
+            "selectedOption": "539",
+            "correctOption": "-70",
+            "trapTitle": "Precedence Hierarchy Slip",
+            "trapExplanation": "First, multiply (-11) × (7) = -77. Next, subtract negative -7: -77 - (-7) = -77 + 7 = -70.",
+            "remedy": "Execute all multiplication and division before performing any addition or subtraction."
+          },
+          {
+            "questionId": "dyn_proc_c1_easy_1790413709553_a2dd",
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "question": "Evaluate using the proper order of operations (PEMDAS): 25 - 18 × 8",
+            "selectedOption": "56",
+            "correctOption": "-119",
+            "trapTitle": "Precedence Hierarchy Slip",
+            "trapExplanation": "Multiplication takes precedence over subtraction: 18 × 8 = 144. Then, 25 - 144 = -119.",
+            "remedy": "Execute all multiplication and division before performing any addition or subtraction."
+          },
+          {
+            "questionId": "dyn_proc_c1_easy_1790413713116_v1um",
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "question": "Evaluate using the proper order of operations (PEMDAS): 23 - 10 × 4",
+            "selectedOption": "63",
+            "correctOption": "-17",
+            "trapTitle": "Precedence Hierarchy Slip",
+            "trapExplanation": "Multiplication takes precedence over subtraction: 10 × 4 = 40. Then, 23 - 40 = -17.",
+            "remedy": "Execute all multiplication and division before performing any addition or subtraction."
+          },
+          {
+            "questionId": "dyn_proc_c1_medium_1790413720228_dgn6",
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "question": "Simplify the integer expression with signed values: (-6) × (3) - (-6)",
+            "selectedOption": "24",
+            "correctOption": "-12",
+            "trapTitle": "Precedence Hierarchy Slip",
+            "trapExplanation": "First, multiply (-6) × (3) = -18. Next, subtract negative -6: -18 - (-6) = -18 + 6 = -12.",
+            "remedy": "Execute all multiplication and division before performing any addition or subtraction."
+          }
+        ],
+        "resolvedGaps": [],
+        "persistentGaps": [
+          "Arithmetic & Number Properties",
+          "Linear Equations & Inequalities",
+          "Polynomial Operations",
+          "Factoring Polynomials",
+          "Quadratic Equations & Roots",
+          "Parabolic Graphs & Vertex Forms",
+          "Exponential Functions"
+        ],
+        "newlyIdentifiedGaps": [],
+        "rootPrerequisiteBottleneck": "c1",
+        "rootBottleneckName": "Arithmetic & Number Properties",
+        "prescription": {
+          "summary": "Impressive progress! Student gained +2% overall mastery during this assessment.",
+          "strengths": [
+            "Arithmetic Fundamentals"
+          ],
+          "focusAreas": [
+            "Arithmetic & Number Properties",
+            "Linear Equations & Inequalities",
+            "Polynomial Operations",
+            "Factoring Polynomials",
+            "Quadratic Equations & Roots",
+            "Parabolic Graphs & Vertex Forms",
+            "Exponential Functions"
+          ],
+          "recommendedAction": "Focus next sprint on Arithmetic & Number Properties to resolve the critical bottleneck unlocking higher-level units.",
+          "mentorInsight": "Student is calibrating baseline performance. Recommended to assign targeted remedial practice for Arithmetic & Number Properties, Linear Equations & Inequalities, Polynomial Operations, Factoring Polynomials, Quadratic Equations & Roots, Parabolic Graphs & Vertex Forms, Exponential Functions."
+        }
+      }
+    },
+    {
+      "id": "sub_1790413651545_cbw",
+      "studentId": "s1",
+      "studentName": "Alex Rivera",
+      "testType": "Adaptive Quiz",
+      "title": "Adaptive Quiz: Arithmetic & Number Properties",
+      "date": "9/26/2026 02:37 PM",
+      "score": 0,
+      "rawAccuracy": 0,
+      "totalQuestions": 5,
+      "correctCount": 0,
+      "durationMinutes": 1,
+      "difficultyReached": "EASY",
+      "answers": [
+        {
+          "questionId": "dyn_proc_c1_medium_1790413621742_p1uv",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "medium",
+          "question": "Simplify the integer expression with signed values: (-15) × (6) - (-3)",
+          "options": [
+            "-93",
+            "270",
+            "-87",
+            "93"
+          ],
+          "studentAnswerIndex": 1,
+          "correctIndex": 2,
+          "isCorrect": false,
+          "timeSpentSeconds": 4,
+          "explanation": "First, multiply (-15) × (6) = -90. Next, subtract negative -3: -90 - (-3) = -90 + 3 = -87."
+        },
+        {
+          "questionId": "dyn_proc_c1_easy_1790413628911_7xzf",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "easy",
+          "question": "Evaluate using the proper order of operations (PEMDAS): 21 - 7 × 6",
+          "options": [
+            "8",
+            "84",
+            "63",
+            "-21"
+          ],
+          "studentAnswerIndex": 1,
+          "correctIndex": 3,
+          "isCorrect": false,
+          "timeSpentSeconds": 3,
+          "explanation": "Multiplication takes precedence over subtraction: 7 × 6 = 42. Then, 21 - 42 = -21."
+        },
+        {
+          "questionId": "dyn_proc_c1_easy_1790413635796_f6p4",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "easy",
+          "question": "Evaluate using the proper order of operations (PEMDAS): 16 - 12 × 4",
+          "options": [
+            "0",
+            "16",
+            "64",
+            "-32"
+          ],
+          "studentAnswerIndex": 0,
+          "correctIndex": 3,
+          "isCorrect": false,
+          "timeSpentSeconds": 3,
+          "explanation": "Multiplication takes precedence over subtraction: 12 × 4 = 48. Then, 16 - 48 = -32."
+        },
+        {
+          "questionId": "dyn_proc_c1_easy_1790413640638_w1uq",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "easy",
+          "question": "Evaluate using the proper order of operations (PEMDAS): 26 - 5 × 4",
+          "options": [
+            "84",
+            "6",
+            "46",
+            "17"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 1,
+          "isCorrect": false,
+          "timeSpentSeconds": 3,
+          "explanation": "Multiplication takes precedence over subtraction: 5 × 4 = 20. Then, 26 - 20 = 6."
+        },
+        {
+          "questionId": "dyn_proc_c1_easy_1790413646761_x5ly",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "easy",
+          "question": "Evaluate using the proper order of operations (PEMDAS): 34 - 20 × 7",
+          "options": [
+            "-106",
+            "174",
+            "98",
+            "7"
+          ],
+          "studentAnswerIndex": 1,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 3,
+          "explanation": "Multiplication takes precedence over subtraction: 20 × 7 = 140. Then, 34 - 140 = -106."
+        }
+      ],
+      "evaluation": {
+        "score": 0,
+        "rawAccuracy": 0,
+        "grade": "Requires Targeted Intervention",
+        "previousOverallMastery": 0,
+        "newOverallMastery": 0,
+        "overallDelta": "+0%",
+        "numericDelta": 0,
+        "avgTimePerQuestion": 3,
+        "learningVelocity": "Needs Support",
+        "conceptDeltas": [
+          {
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "previousMastery": 0,
+            "newMastery": 0,
+            "delta": "+0%",
+            "numericDelta": 0,
+            "testAccuracy": 0,
+            "questionsCount": 5,
+            "status": "Steady"
+          }
+        ],
+        "cognitiveDiagnoses": [
+          {
+            "questionId": "dyn_proc_c1_medium_1790413621742_p1uv",
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "question": "Simplify the integer expression with signed values: (-15) × (6) - (-3)",
+            "selectedOption": "270",
+            "correctOption": "-87",
+            "trapTitle": "Precedence Hierarchy Slip",
+            "trapExplanation": "First, multiply (-15) × (6) = -90. Next, subtract negative -3: -90 - (-3) = -90 + 3 = -87.",
+            "remedy": "Execute all multiplication and division before performing any addition or subtraction."
+          },
+          {
+            "questionId": "dyn_proc_c1_easy_1790413628911_7xzf",
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "question": "Evaluate using the proper order of operations (PEMDAS): 21 - 7 × 6",
+            "selectedOption": "84",
+            "correctOption": "-21",
+            "trapTitle": "Precedence Hierarchy Slip",
+            "trapExplanation": "Multiplication takes precedence over subtraction: 7 × 6 = 42. Then, 21 - 42 = -21.",
+            "remedy": "Execute all multiplication and division before performing any addition or subtraction."
+          },
+          {
+            "questionId": "dyn_proc_c1_easy_1790413635796_f6p4",
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "question": "Evaluate using the proper order of operations (PEMDAS): 16 - 12 × 4",
+            "selectedOption": "0",
+            "correctOption": "-32",
+            "trapTitle": "Precedence Hierarchy Slip",
+            "trapExplanation": "Multiplication takes precedence over subtraction: 12 × 4 = 48. Then, 16 - 48 = -32.",
+            "remedy": "Execute all multiplication and division before performing any addition or subtraction."
+          },
+          {
+            "questionId": "dyn_proc_c1_easy_1790413640638_w1uq",
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "question": "Evaluate using the proper order of operations (PEMDAS): 26 - 5 × 4",
+            "selectedOption": "46",
+            "correctOption": "6",
+            "trapTitle": "Precedence Hierarchy Slip",
+            "trapExplanation": "Multiplication takes precedence over subtraction: 5 × 4 = 20. Then, 26 - 20 = 6.",
+            "remedy": "Execute all multiplication and division before performing any addition or subtraction."
+          },
+          {
+            "questionId": "dyn_proc_c1_easy_1790413646761_x5ly",
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "question": "Evaluate using the proper order of operations (PEMDAS): 34 - 20 × 7",
+            "selectedOption": "174",
+            "correctOption": "-106",
+            "trapTitle": "Precedence Hierarchy Slip",
+            "trapExplanation": "Multiplication takes precedence over subtraction: 20 × 7 = 140. Then, 34 - 140 = -106.",
+            "remedy": "Execute all multiplication and division before performing any addition or subtraction."
+          }
+        ],
+        "resolvedGaps": [],
+        "persistentGaps": [
+          "Arithmetic & Number Properties",
+          "Linear Equations & Inequalities",
+          "Polynomial Operations",
+          "Factoring Polynomials",
+          "Quadratic Equations & Roots",
+          "Parabolic Graphs & Vertex Forms",
+          "Exponential Functions"
+        ],
+        "newlyIdentifiedGaps": [],
+        "rootPrerequisiteBottleneck": "c1",
+        "rootBottleneckName": "Arithmetic & Number Properties",
+        "prescription": {
+          "summary": "Impressive progress! Student gained +0% overall mastery during this assessment.",
+          "strengths": [
+            "Arithmetic Fundamentals"
+          ],
+          "focusAreas": [
+            "Arithmetic & Number Properties",
+            "Linear Equations & Inequalities",
+            "Polynomial Operations",
+            "Factoring Polynomials",
+            "Quadratic Equations & Roots",
+            "Parabolic Graphs & Vertex Forms",
+            "Exponential Functions"
+          ],
+          "recommendedAction": "Focus next sprint on Arithmetic & Number Properties to resolve the critical bottleneck unlocking higher-level units.",
+          "mentorInsight": "Student is calibrating baseline performance. Recommended to assign targeted remedial practice for Arithmetic & Number Properties, Linear Equations & Inequalities, Polynomial Operations, Factoring Polynomials, Quadratic Equations & Roots, Parabolic Graphs & Vertex Forms, Exponential Functions."
+        }
+      }
+    },
+    {
+      "id": "sub_1790413607287_ise",
+      "studentId": "s1",
+      "studentName": "Alex Rivera",
+      "testType": "Diagnostic Assessment",
+      "title": "Baseline Algebra Readiness Diagnostic",
+      "date": "9/26/2026 02:36 PM",
+      "score": 0,
+      "rawAccuracy": 0,
+      "totalQuestions": 12,
+      "correctCount": 0,
+      "durationMinutes": 1,
+      "difficultyReached": "EASY",
+      "answers": [
+        {
+          "questionId": "q_c1_e1",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "easy",
+          "question": "What is the value of 14 - 3 × (2 + 1)?",
+          "options": [
+            "33",
+            "5",
+            "11",
+            "7"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 1,
+          "isCorrect": false,
+          "timeSpentSeconds": 2,
+          "explanation": "First evaluate inside parentheses: (2 + 1) = 3. Next multiply: 3 × 3 = 9. Finally subtract: 14 - 9 = 5."
+        },
+        {
+          "questionId": "q_c1_m1",
+          "conceptId": "c1",
+          "conceptName": "Arithmetic & Number Properties",
+          "difficulty": "medium",
+          "question": "Simplify the expression: -3(4x - 5) + 2(x + 7)",
+          "options": [
+            "-10x + 29",
+            "-10x - 1",
+            "-14x + 29",
+            "-10x + 1"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 1,
+          "explanation": "-3(4x - 5) = -12x + 15. Then 2(x + 7) = 2x + 14. Combining like terms: (-12x + 2x) + (15 + 14) = -10x + 29."
+        },
+        {
+          "questionId": "q_c2_e1",
+          "conceptId": "c2",
+          "conceptName": "Linear Equations & Inequalities",
+          "difficulty": "easy",
+          "question": "Solve for x: 3x - 7 = 14",
+          "options": [
+            "x = 7",
+            "x = 21",
+            "x = 3",
+            "x = 2.33"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 1,
+          "explanation": "3x - 7 = 14 => 3x = 14 + 7 = 21 => x = 21 / 3 = 7."
+        },
+        {
+          "questionId": "q_c2_m1",
+          "conceptId": "c2",
+          "conceptName": "Linear Equations & Inequalities",
+          "difficulty": "medium",
+          "question": "Solve the inequality: 4 - 3x ≤ 19",
+          "options": [
+            "x ≥ -5",
+            "x ≤ -5",
+            "x ≥ 5",
+            "x ≤ 5"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 1,
+          "explanation": "4 - 3x ≤ 19 => -3x ≤ 15 => Dividing by -3 reverses inequality: x ≥ -5."
+        },
+        {
+          "questionId": "q_c3_e1",
+          "conceptId": "c3",
+          "conceptName": "Polynomial Operations",
+          "difficulty": "easy",
+          "question": "Combine like terms: (4x² - 3x + 8) + (2x² + 7x - 5)",
+          "options": [
+            "6x² + 4x + 3",
+            "6x² - 10x + 3",
+            "6x⁴ + 4x² + 3",
+            "2x² + 4x + 3"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 1,
+          "explanation": "(4x² + 2x²) + (-3x + 7x) + (8 - 5) = 6x² + 4x + 3."
+        },
+        {
+          "questionId": "q_c3_m1",
+          "conceptId": "c3",
+          "conceptName": "Polynomial Operations",
+          "difficulty": "medium",
+          "question": "Expand and simplify: (2x - 3)(3x + 4)",
+          "options": [
+            "6x² - x - 12",
+            "6x² + x - 12",
+            "6x² - 12",
+            "6x² - 17x - 12"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 1,
+          "explanation": "First: 6x². Outer: +8x. Inner: -9x. Last: -12. Sum: 6x² + (8x - 9x) - 12 = 6x² - x - 12."
+        },
+        {
+          "questionId": "q_c4_e1",
+          "conceptId": "c4",
+          "conceptName": "Factoring Polynomials",
+          "difficulty": "easy",
+          "question": "Factor completely: 5x² - 20x",
+          "options": [
+            "5x(x - 4)",
+            "5(x² - 4x)",
+            "x(5x - 20)",
+            "(5x - 4)(x + 5)"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 1,
+          "explanation": "Both 5x² and 20x share 5x as a factor: 5x² / 5x = x, and -20x / 5x = -4. Result: 5x(x - 4)."
+        },
+        {
+          "questionId": "q_c4_m1",
+          "conceptId": "c4",
+          "conceptName": "Factoring Polynomials",
+          "difficulty": "medium",
+          "question": "Factor the quadratic trinomial: x² - 7x + 12",
+          "options": [
+            "(x - 3)(x - 4)",
+            "(x + 3)(x + 4)",
+            "(x - 2)(x - 6)",
+            "(x + 2)(x - 6)"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 1,
+          "explanation": "The factors of 12 that sum to -7 are -3 and -4 (-3 × -4 = 12 and -3 + -4 = -7). Hence (x - 3)(x - 4)."
+        },
+        {
+          "questionId": "q_c5_e1",
+          "conceptId": "c5",
+          "conceptName": "Quadratic Equations & Roots",
+          "difficulty": "easy",
+          "question": "Solve for x using factoring: x² - 9 = 0",
+          "options": [
+            "x = 3 and x = -3",
+            "x = 9 only",
+            "x = 3 only",
+            "x = 81 and x = -81"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 1,
+          "explanation": "x² - 9 = (x - 3)(x + 3) = 0. By zero product property, x = 3 or x = -3."
+        },
+        {
+          "questionId": "q_c5_m1",
+          "conceptId": "c5",
+          "conceptName": "Quadratic Equations & Roots",
+          "difficulty": "medium",
+          "question": "What is the discriminant of 2x² - 4x + 2 = 0, and what does it tell you about the roots?",
+          "options": [
+            "D = 0; exactly one real root (repeated)",
+            "D = 32; two distinct real roots",
+            "D = -32; no real roots (two complex)",
+            "D = 16; two distinct rational roots"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 1,
+          "explanation": "D = (-4)² - 4(2)(2) = 16 - 16 = 0. When D = 0, the equation has one double real root."
+        },
+        {
+          "questionId": "q_c6_e1",
+          "conceptId": "c6",
+          "conceptName": "Parabolic Graphs & Vertex Forms",
+          "difficulty": "easy",
+          "question": "What are the coordinates of the vertex for y = (x - 4)² + 3?",
+          "options": [
+            "(4, 3)",
+            "(-4, 3)",
+            "(4, -3)",
+            "(-4, -3)"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 1,
+          "explanation": "Comparing with y = a(x - h)² + k: h = 4, k = 3. The vertex point is (4, 3)."
+        },
+        {
+          "questionId": "q_c7_e1",
+          "conceptId": "c7",
+          "conceptName": "Exponential Functions",
+          "difficulty": "easy",
+          "question": "If f(x) = 3 · 2^x, what is the value of f(4)?",
+          "options": [
+            "48",
+            "24",
+            "36",
+            "16"
+          ],
+          "studentAnswerIndex": 2,
+          "correctIndex": 0,
+          "isCorrect": false,
+          "timeSpentSeconds": 1,
+          "explanation": "2^4 = 16. Then f(4) = 3 × 16 = 48."
+        }
+      ],
+      "evaluation": {
+        "score": 0,
+        "rawAccuracy": 0,
+        "grade": "Requires Targeted Intervention",
+        "previousOverallMastery": 48,
+        "newOverallMastery": 0,
+        "overallDelta": "-48%",
+        "numericDelta": -48,
+        "avgTimePerQuestion": 1,
+        "learningVelocity": "Needs Support",
+        "conceptDeltas": [
+          {
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "previousMastery": 94,
+            "newMastery": 0,
+            "delta": "-94%",
+            "numericDelta": -94,
+            "testAccuracy": 0,
+            "questionsCount": 2,
+            "status": "Needs Reinforcement ⚠️"
+          },
+          {
+            "conceptId": "c2",
+            "conceptName": "Linear Equations & Inequalities",
+            "previousMastery": 31,
+            "newMastery": 0,
+            "delta": "-31%",
+            "numericDelta": -31,
+            "testAccuracy": 0,
+            "questionsCount": 2,
+            "status": "Needs Reinforcement ⚠️"
+          },
+          {
+            "conceptId": "c3",
+            "conceptName": "Polynomial Operations",
+            "previousMastery": 84,
+            "newMastery": 0,
+            "delta": "-84%",
+            "numericDelta": -84,
+            "testAccuracy": 0,
+            "questionsCount": 2,
+            "status": "Needs Reinforcement ⚠️"
+          },
+          {
+            "conceptId": "c4",
+            "conceptName": "Factoring Polynomials",
+            "previousMastery": 28,
+            "newMastery": 0,
+            "delta": "-28%",
+            "numericDelta": -28,
+            "testAccuracy": 0,
+            "questionsCount": 2,
+            "status": "Needs Reinforcement ⚠️"
+          },
+          {
+            "conceptId": "c5",
+            "conceptName": "Quadratic Equations & Roots",
+            "previousMastery": 32,
+            "newMastery": 0,
+            "delta": "-32%",
+            "numericDelta": -32,
+            "testAccuracy": 0,
+            "questionsCount": 2,
+            "status": "Needs Reinforcement ⚠️"
+          },
+          {
+            "conceptId": "c6",
+            "conceptName": "Parabolic Graphs & Vertex Forms",
+            "previousMastery": 20,
+            "newMastery": 0,
+            "delta": "-20%",
+            "numericDelta": -20,
+            "testAccuracy": 0,
+            "questionsCount": 1,
+            "status": "Needs Reinforcement ⚠️"
+          },
+          {
+            "conceptId": "c7",
+            "conceptName": "Exponential Functions",
+            "previousMastery": 45,
+            "newMastery": 0,
+            "delta": "-45%",
+            "numericDelta": -45,
+            "testAccuracy": 0,
+            "questionsCount": 1,
+            "status": "Needs Reinforcement ⚠️"
+          }
+        ],
+        "cognitiveDiagnoses": [
+          {
+            "questionId": "q_c1_e1",
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "question": "What is the value of 14 - 3 × (2 + 1)?",
+            "selectedOption": "11",
+            "correctOption": "5",
+            "trapTitle": "Precedence Hierarchy Slip",
+            "trapExplanation": "First evaluate inside parentheses: (2 + 1) = 3. Next multiply: 3 × 3 = 9. Finally subtract: 14 - 9 = 5.",
+            "remedy": "Execute all multiplication and division before performing any addition or subtraction."
+          },
+          {
+            "questionId": "q_c1_m1",
+            "conceptId": "c1",
+            "conceptName": "Arithmetic & Number Properties",
+            "question": "Simplify the expression: -3(4x - 5) + 2(x + 7)",
+            "selectedOption": "-14x + 29",
+            "correctOption": "-10x + 29",
+            "trapTitle": "Precedence Hierarchy Slip",
+            "trapExplanation": "-3(4x - 5) = -12x + 15. Then 2(x + 7) = 2x + 14. Combining like terms: (-12x + 2x) + (15 + 14) = -10x + 29.",
+            "remedy": "Execute all multiplication and division before performing any addition or subtraction."
+          },
+          {
+            "questionId": "q_c2_e1",
+            "conceptId": "c2",
+            "conceptName": "Linear Equations & Inequalities",
+            "question": "Solve for x: 3x - 7 = 14",
+            "selectedOption": "x = 3",
+            "correctOption": "x = 7",
+            "trapTitle": "Conceptual Misapplication",
+            "trapExplanation": "3x - 7 = 14 => 3x = 14 + 7 = 21 => x = 21 / 3 = 7.",
+            "remedy": "Double-check inverse mathematical operations."
+          },
+          {
+            "questionId": "q_c2_m1",
+            "conceptId": "c2",
+            "conceptName": "Linear Equations & Inequalities",
+            "question": "Solve the inequality: 4 - 3x ≤ 19",
+            "selectedOption": "x ≥ 5",
+            "correctOption": "x ≥ -5",
+            "trapTitle": "Inequality Negative Inversion Trap",
+            "trapExplanation": "4 - 3x ≤ 19 => -3x ≤ 15 => Dividing by -3 reverses inequality: x ≥ -5.",
+            "remedy": "Always flip the direction of the inequality (≤ becomes ≥) when dividing by a negative number."
+          },
+          {
+            "questionId": "q_c3_e1",
+            "conceptId": "c3",
+            "conceptName": "Polynomial Operations",
+            "question": "Combine like terms: (4x² - 3x + 8) + (2x² + 7x - 5)",
+            "selectedOption": "6x⁴ + 4x² + 3",
+            "correctOption": "6x² + 4x + 3",
+            "trapTitle": "Conceptual Misapplication",
+            "trapExplanation": "(4x² + 2x²) + (-3x + 7x) + (8 - 5) = 6x² + 4x + 3.",
+            "remedy": "Double-check inverse mathematical operations."
+          },
+          {
+            "questionId": "q_c3_m1",
+            "conceptId": "c3",
+            "conceptName": "Polynomial Operations",
+            "question": "Expand and simplify: (2x - 3)(3x + 4)",
+            "selectedOption": "6x² - 12",
+            "correctOption": "6x² - x - 12",
+            "trapTitle": "Conceptual Misapplication",
+            "trapExplanation": "First: 6x². Outer: +8x. Inner: -9x. Last: -12. Sum: 6x² + (8x - 9x) - 12 = 6x² - x - 12.",
+            "remedy": "Double-check inverse mathematical operations."
+          },
+          {
+            "questionId": "q_c4_e1",
+            "conceptId": "c4",
+            "conceptName": "Factoring Polynomials",
+            "question": "Factor completely: 5x² - 20x",
+            "selectedOption": "x(5x - 20)",
+            "correctOption": "5x(x - 4)",
+            "trapTitle": "Binomial Sign / Factoring Trap",
+            "trapExplanation": "Both 5x² and 20x share 5x as a factor: 5x² / 5x = x, and -20x / 5x = -4. Result: 5x(x - 4).",
+            "remedy": "Multiply the outer and inner terms of your binomial factors to verify they reconstruct the middle coefficient."
+          },
+          {
+            "questionId": "q_c4_m1",
+            "conceptId": "c4",
+            "conceptName": "Factoring Polynomials",
+            "question": "Factor the quadratic trinomial: x² - 7x + 12",
+            "selectedOption": "(x - 2)(x - 6)",
+            "correctOption": "(x - 3)(x - 4)",
+            "trapTitle": "Binomial Sign / Factoring Trap",
+            "trapExplanation": "The factors of 12 that sum to -7 are -3 and -4 (-3 × -4 = 12 and -3 + -4 = -7). Hence (x - 3)(x - 4).",
+            "remedy": "Multiply the outer and inner terms of your binomial factors to verify they reconstruct the middle coefficient."
+          },
+          {
+            "questionId": "q_c5_e1",
+            "conceptId": "c5",
+            "conceptName": "Quadratic Equations & Roots",
+            "question": "Solve for x using factoring: x² - 9 = 0",
+            "selectedOption": "x = 3 only",
+            "correctOption": "x = 3 and x = -3",
+            "trapTitle": "Binomial Sign / Factoring Trap",
+            "trapExplanation": "x² - 9 = (x - 3)(x + 3) = 0. By zero product property, x = 3 or x = -3.",
+            "remedy": "Multiply the outer and inner terms of your binomial factors to verify they reconstruct the middle coefficient."
+          },
+          {
+            "questionId": "q_c5_m1",
+            "conceptId": "c5",
+            "conceptName": "Quadratic Equations & Roots",
+            "question": "What is the discriminant of 2x² - 4x + 2 = 0, and what does it tell you about the roots?",
+            "selectedOption": "D = -32; no real roots (two complex)",
+            "correctOption": "D = 0; exactly one real root (repeated)",
+            "trapTitle": "Conceptual Misapplication",
+            "trapExplanation": "D = (-4)² - 4(2)(2) = 16 - 16 = 0. When D = 0, the equation has one double real root.",
+            "remedy": "Double-check inverse mathematical operations."
+          },
+          {
+            "questionId": "q_c6_e1",
+            "conceptId": "c6",
+            "conceptName": "Parabolic Graphs & Vertex Forms",
+            "question": "What are the coordinates of the vertex for y = (x - 4)² + 3?",
+            "selectedOption": "(4, -3)",
+            "correctOption": "(4, 3)",
+            "trapTitle": "Vertex Sign Inversion Error",
+            "trapExplanation": "Comparing with y = a(x - h)² + k: h = 4, k = 3. The vertex point is (4, 3).",
+            "remedy": "In vertex form y = a(x - h)² + k, the horizontal vertex coordinate has the opposite sign: (h, k)."
+          },
+          {
+            "questionId": "q_c7_e1",
+            "conceptId": "c7",
+            "conceptName": "Exponential Functions",
+            "question": "If f(x) = 3 · 2^x, what is the value of f(4)?",
+            "selectedOption": "36",
+            "correctOption": "48",
+            "trapTitle": "Conceptual Misapplication",
+            "trapExplanation": "2^4 = 16. Then f(4) = 3 × 16 = 48.",
+            "remedy": "Double-check inverse mathematical operations."
+          }
+        ],
+        "resolvedGaps": [],
+        "persistentGaps": [
+          "Linear Equations & Inequalities",
+          "Factoring Polynomials",
+          "Quadratic Equations & Roots",
+          "Parabolic Graphs & Vertex Forms",
+          "Exponential Functions"
+        ],
+        "newlyIdentifiedGaps": [
+          "Arithmetic & Number Properties",
+          "Polynomial Operations"
+        ],
+        "rootPrerequisiteBottleneck": "c1",
+        "rootBottleneckName": "Arithmetic & Number Properties",
+        "prescription": {
+          "summary": "Diagnostic assessment complete. Baseline calibrated across foundational competencies.",
+          "strengths": [
+            "Arithmetic Fundamentals"
+          ],
+          "focusAreas": [
+            "Arithmetic & Number Properties",
+            "Linear Equations & Inequalities",
+            "Polynomial Operations",
+            "Factoring Polynomials",
+            "Quadratic Equations & Roots",
+            "Parabolic Graphs & Vertex Forms",
+            "Exponential Functions"
+          ],
+          "recommendedAction": "Focus next sprint on Arithmetic & Number Properties to resolve the critical bottleneck unlocking higher-level units.",
+          "mentorInsight": "Student is calibrating baseline performance. Recommended to assign targeted remedial practice for Arithmetic & Number Properties, Linear Equations & Inequalities, Polynomial Operations, Factoring Polynomials, Quadratic Equations & Roots, Parabolic Graphs & Vertex Forms, Exponential Functions."
+        }
+      }
+    },
     {
       "id": "sub_1790413270274_536",
       "studentId": "s1",

@@ -211,5 +211,52 @@ export const ApiClient = {
       student: result.student,
       submission: result.submission
     };
+  },
+
+  // Gemini AI Tutor Chat: routed securely via backend with no exposed API key
+  chatWithTutor: async ({ message, subjectId = 'mathematics', context = {} }) => {
+    try {
+      const res = await fetch(`${API_BASE}/ai/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message,
+          subjectId,
+          context
+        })
+      });
+
+      if (res.status === 429) {
+        const errorData = await res.json().catch(() => ({}));
+        const err = new Error(errorData.message || 'API rate limit exceeded. Please wait a moment.');
+        err.status = 429;
+        err.retryAfter = errorData.retryAfter || 30;
+        throw err;
+      }
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || `Server responded with status ${res.status}`);
+      }
+
+      const data = await res.json();
+      if (!data || !data.reply || typeof data.reply !== 'string' || !data.reply.trim()) {
+        throw new Error('Received malformed or empty response from AI tutor');
+      }
+
+      return data;
+    } catch (e) {
+      if (e.status === 429) throw e;
+      // Network failure or backend down: fall back to offline pedagogical response
+      console.warn('Backend chat unreachable or failed, utilizing local fallback engine:', e.message);
+      
+      // If network failure, rethrow so the UI can offer a retry affordance
+      if (e.name === 'TypeError' || e.message?.includes('fetch') || e.message?.includes('network')) {
+        const netErr = new Error('Network failure: unable to reach the AI Tutor server.');
+        netErr.isNetwork = true;
+        throw netErr;
+      }
+      throw e;
+    }
   }
 };

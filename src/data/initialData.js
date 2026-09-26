@@ -4,7 +4,7 @@ export const INITIAL_CLASSES = [
   {
     id: 'class-a',
     name: 'Class 10-A',
-    subject: 'Algorithmic Foundations & Algebra',
+    subject: 'Mathematics',
     mentorId: 'm1',
     mentorName: 'Dr. Marcus Vance',
     room: 'Hall 302',
@@ -16,7 +16,7 @@ export const INITIAL_CLASSES = [
   {
     id: 'class-b',
     name: 'Class 10-B',
-    subject: 'Applied Mathematics & Modeling',
+    subject: 'Mathematics',
     mentorId: 'm1',
     mentorName: 'Dr. Marcus Vance',
     room: 'Hall 104',
@@ -28,13 +28,13 @@ export const INITIAL_CLASSES = [
   {
     id: 'class-c',
     name: 'Class 11-A',
-    subject: 'Advanced Functions & Pre-Calculus',
+    subject: 'Science',
     mentorId: 'm2',
     mentorName: 'Dr. Elena Rostova',
     room: 'Hall 405',
     schedule: 'Mon / Wed 02:00 PM',
     studentIds: [],
-    targetCurriculum: 'Pre-Calculus & Polynomial Analysis',
+    targetCurriculum: 'Physics & Thermodynamics',
     academicTerm: 'Fall 2026'
   }
 ];
