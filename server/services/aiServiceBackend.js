@@ -1,6 +1,7 @@
 // Server-Side AI Pedagogical Tutor Service
 
 import { CONCEPTS, CONCEPT_LESSONS } from '../../src/data/conceptsData.js';
+import { DynamicTutorEngine } from './dynamicTutorEngine.js';
 
 export const AiServiceBackend = {
   explainConcept: async (conceptId, style = 'standard', customApiKey = null) => {
@@ -167,78 +168,11 @@ Conclude with exactly ONE targeted, diagnostic follow-up question to test whethe
         }
       } catch (err) {
         if (err.status === 429) throw err;
-        console.warn('Gemini chat error, utilizing grounded fallback engine:', err.message);
+        console.warn('Gemini chat error, utilizing dynamic pedagogical engine:', err.message);
       }
     }
 
-    // High-fidelity structured fallback adhering strictly to the 3-part specification
-    const msg = userMessage.toLowerCase();
-    
-    if (subjectId === 'science') {
-      return {
-        reply: `### Core Concept Explanation
-In science, physical systems operate under fundamental conservation laws. Think of thermodynamic entropy like an organized bedroom: without deliberate energy and work put in to tidy up, natural chaos and heat dispersion steadily increase over time!
-
-### Step-by-Step Breakdown
-1. **Define the System & Surroundings**: Clearly isolate the boundaries where energy exchange occurs.
-2. **Track Energy Transfer**: Apply the First Law: $\\Delta U = Q - W$, measuring heat absorbed ($Q$) and work done ($W$).
-3. **Assess Equilibrium**: Calculate whether the process is spontaneous by determining if Gibbs Free Energy $\\Delta G = \\Delta H - T\\Delta S < 0$.
-
-### Concept Check
-If a chemical reaction absorbs heat from its surroundings ($Q > 0$) while becoming more disordered ($\\Delta S > 0$), what happens to spontaneity at high temperatures?`,
-        model: 'offline-grounded-engine',
-        subjectId: 'science'
-      };
-    }
-
-    if (subjectId === 'english') {
-      return {
-        reply: `### Core Concept Explanation
-In analytical writing, constructing an argument is like building a suspension bridge: your thesis statement is the central roadway, and your topic sentences and textual citations are the reinforced steel cables holding it steady against opposing counterarguments.
-
-### Step-by-Step Breakdown
-1. **State the Claim**: Formulate an arguable assertion rather than a simple factual statement.
-2. **Embed Contextual Evidence**: Integrate a quotation or primary citation seamlessly into your sentence syntax.
-3. **Analyze the Rhetorical Mechanism**: Explain *how* the author's diction, syntax, or figurative appeal supports their ultimate purpose.
-
-### Concept Check
-Can you identify whether the following is a fact or an arguable claim: *"Shakespeare's Hamlet reflects the existential anxiety of the Renaissance."*?`,
-        model: 'offline-grounded-engine',
-        subjectId: 'english'
-      };
-    }
-
-    if (subjectId === 'history') {
-      return {
-        reply: `### Core Concept Explanation
-Studying history is like detective work with multiple eyewitness testimonies. We examine primary documents (letters, treaties, speeches) and evaluate the author's point of view, intended audience, and geopolitical pressures.
-
-### Step-by-Step Breakdown
-1. **Contextualize the Event**: Anchor the situation in its precise timeframe and geographical location.
-2. **Corroborate Sources**: Compare differing accounts from opposing parties to cross-examine credibility.
-3. **Synthesize Causation**: Distinguish between immediate triggers (short-term) and systemic structural roots (long-term).
-
-### Concept Check
-What was the primary ideological difference between the Truman Doctrine and George Kennan's original containment telegram?`,
-        model: 'offline-grounded-engine',
-        subjectId: 'history'
-      };
-    }
-
-    // Default to Mathematics
-    return {
-      reply: `### Core Concept Explanation
-When solving algebraic relationships or factoring polynomials, think of the algebraic equation like a perfectly balanced kitchen scale. Whatever operation you apply to one side, you must apply to the other to keep balance intact! Factoring is simply un-multiplying—finding the common ingredient every term shares and pulling it out front.
-
-### Step-by-Step Breakdown
-1. **Identify Common Factors (GCF)**: Check coefficients and variable powers to extract the largest shared component.
-2. **Recognize Structural Patterns**: Look for difference of squares ($a^2 - b^2 = (a-b)(a+b)$) or quadratic trinomials ($ax^2 + bx + c$).
-3. **Verify by Distribution**: Multiply back through (FOIL) to ensure you reproduce the starting expression precisely.
-
-### Concept Check
-If you factor $2x^2 + 8x$, what is the greatest common factor (GCF) that you pull outside the parentheses?`,
-      model: 'offline-grounded-engine',
-      subjectId: 'mathematics'
-    };
+    // Dynamic, question-specific pedagogical engine
+    return DynamicTutorEngine.generateResponse(userMessage, subjectId, context);
   }
 };

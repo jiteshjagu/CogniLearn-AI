@@ -55,3 +55,51 @@ aiRouter.post('/chat', async (req, res) => {
     res.status(500).json({ error: err.message || 'Internal server error while processing AI tutor response.' });
   }
 });
+
+// GET: Check whether Gemini API key is currently active
+aiRouter.get('/key-status', (req, res) => {
+  const hasKey = Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim());
+  res.json({
+    hasKey,
+    model: 'gemini-1.5-flash',
+    source: hasKey ? 'Configured in backend .env' : 'Running on dynamic intelligent pedagogical engine'
+  });
+});
+
+// POST: Dynamically connect / update Gemini API key and persist to .env
+aiRouter.post('/set-key', async (req, res) => {
+  const { apiKey } = req.body;
+  if (!apiKey || !apiKey.trim()) {
+    return res.status(400).json({ error: 'API key cannot be empty' });
+  }
+
+  const cleanKey = apiKey.trim().replace(/^["']|["']$/g, '');
+  process.env.GEMINI_API_KEY = cleanKey;
+
+  // Persist to .env file
+  try {
+    const fs = await import('fs');
+    const path = await import('path');
+    const envPath = path.resolve(process.cwd(), '.env');
+    let envContent = '';
+    if (fs.existsSync(envPath)) {
+      envContent = fs.readFileSync(envPath, 'utf8');
+      if (envContent.includes('GEMINI_API_KEY=')) {
+        envContent = envContent.replace(/GEMINI_API_KEY=.*(\r?\n|$)/, `GEMINI_API_KEY=${cleanKey}\n`);
+      } else {
+        envContent += `\nGEMINI_API_KEY=${cleanKey}\n`;
+      }
+    } else {
+      envContent = `GEMINI_API_KEY=${cleanKey}\nPORT=5001\n`;
+    }
+    fs.writeFileSync(envPath, envContent, 'utf8');
+  } catch (e) {
+    console.warn('Notice: Could not persist to .env file:', e.message);
+  }
+
+  res.json({
+    success: true,
+    message: 'Google Gemini API key connected successfully! The chatbot will now provide live model inference.'
+  });
+});
+

@@ -258,5 +258,30 @@ export const ApiClient = {
       }
       throw e;
     }
+  },
+
+  // Check if Gemini API key is configured
+  getApiKeyStatus: async () => {
+    try {
+      const res = await fetch(`${API_BASE}/ai/key-status`);
+      if (res.ok) return await res.json();
+    } catch {}
+    return { hasKey: false, model: 'dynamic-pedagogical-engine' };
+  },
+
+  // Save/Connect Gemini API key
+  setApiKey: async (apiKey) => {
+    try {
+      const res = await fetch(`${API_BASE}/ai/set-key`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ apiKey })
+      });
+      if (res.ok) return await res.json();
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || 'Failed to save API key');
+    } catch (e) {
+      throw e;
+    }
   }
 };
