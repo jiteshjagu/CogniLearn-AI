@@ -13,7 +13,8 @@ import { aiRouter } from './routes/aiRoutes.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+// Default to 5001 to avoid macOS AirPlay Receiver on port 5000
+const PORT = process.env.PORT || 5001;
 
 // Middlewares
 app.use(cors());
@@ -38,6 +39,7 @@ app.get('/api/system/health', (req, res) => {
     status: 'online',
     platform: 'CogniLearn AI Adaptive Learning Platform Backend',
     version: '2.0.0',
+    port: PORT,
     timestamp: new Date().toISOString(),
     stats: {
       classes: db.getClasses().length,
@@ -61,7 +63,15 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal Server Error', message: err.message });
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`🚀 CogniLearn AI Adaptive Backend Server running on http://localhost:${PORT}`);
   console.log(`📡 Health endpoint: http://localhost:${PORT}/api/system/health`);
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`⚠️ Port ${PORT} is in use. Please free port ${PORT} or set PORT in .env`);
+  } else {
+    console.error('Server error:', err);
+  }
 });
