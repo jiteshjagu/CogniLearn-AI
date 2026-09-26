@@ -141,14 +141,6 @@ export const AdminDashboard = ({ currentUser, onBackToLogin, onNavigateStudent }
                 </button>
               )}
 
-              <button
-                onClick={onBackToLogin}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-2xs transition-colors"
-              >
-                <LogOut className="w-4 h-4" />
-                <span>Back to Login</span>
-              </button>
-
             </div>
 
           </div>
